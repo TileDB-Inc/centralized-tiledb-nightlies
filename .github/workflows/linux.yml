@@ -1,0 +1,83 @@
+name: Nightly builds on linux
+on:
+  push:
+    paths:
+      - '.github/workflows/linux.yml'
+      - 'scripts/**'
+  pull_request:
+    paths:
+      - '.github/workflows/linux.yml'
+      - 'scripts/**'
+  schedule:
+    - cron: "0 2 * * *" # Every night at 2 AM UTC (9 PM EST; 10 PM EDT)
+  workflow_dispatch:
+jobs:
+  libtiledb:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Clone TileDB
+        uses: actions/checkout@v3
+        with:
+          repository: TileDB-Inc/TileDB
+          ref: dev
+          path: TileDB
+  tiledb-py:
+    runs-on: ubuntu-latest
+    needs: libtiledb
+    steps:
+      - name: Clone TileDB-Py
+        uses: actions/checkout@v3
+        with:
+          repository: TileDB-Inc/TileDB-Py
+          ref: dev
+          path: TileDB-Py
+  tiledb-r:
+    runs-on: ubuntu-latest
+    needs: libtiledb
+    steps:
+      - name: Clone TileDB-R
+        uses: actions/checkout@v3
+        with:
+          repository: TileDB-Inc/TileDB-R
+          ref: master
+          path: TileDB-R
+  tiledb-vcf:
+    runs-on: ubuntu-latest
+    needs: [libtiledb, tiledb-py]
+    steps:
+      - name: Clone TileDB-VCF
+        uses: actions/checkout@v3
+        with:
+          repository: TileDB-Inc/TileDB-VCF
+          ref: main
+          path: TileDB-VCF
+  tiledb-soma:
+    runs-on: ubuntu-latest
+    needs: [libtiledb, tiledb-py, tiledb-r]
+    steps:
+      - name: Clone TileDB-SOMA
+        uses: actions/checkout@v3
+        with:
+          repository: single-cell-data/TileDB-SOMA
+          ref: main
+          path: TileDB-SOMA
+  tiledb-mariadb:
+    runs-on: ubuntu-latest
+    needs: [libtiledb]
+    steps:
+      - name: Clone TileDB-MariaDB
+        uses: actions/checkout@v3
+        with:
+          repository: single-cell-data/TileDB-MariaDB
+          ref: master
+          path: TileDB-MariaDB
+  tiledb-go:
+    runs-on: ubuntu-latest
+    needs: [libtiledb]
+    steps:
+      - name: Clone TileDB-Go
+        uses: actions/checkout@v3
+        with:
+          repository: single-cell-data/TileDB-Go
+          ref: master
+          path: TileDB-Go
