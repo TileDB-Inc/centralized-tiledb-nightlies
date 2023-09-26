@@ -99,7 +99,12 @@ jobs:
       - name: Install
         run: |
           R CMD INSTALL --configure-args=--with-tiledb=$GITHUB_WORKSPACE/install --build tiledb_*.tar.gz
-          ls -R
+      - name: Upload R binary tarball as artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: nightly-tiledb-r-linux
+          path: tiledb_*_R_x86_64-pc-linux-gnu.tar.gz
+          retention-days: 14
       - name: Test
         run: R -e 'tinytest::test_package("tiledb")'
   tiledb-vcf:
