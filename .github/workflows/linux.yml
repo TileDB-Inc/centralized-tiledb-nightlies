@@ -31,7 +31,7 @@ jobs:
       - name: Upload tarball as artifact
         uses: actions/upload-artifact@v3
         with:
-          name: nightly-libtiledb
+          name: nightly-libtiledb-linux
           path: |
             install/include/
             install/lib*/
@@ -51,7 +51,7 @@ jobs:
       - name: Download nightly-libtiledb
         uses: actions/download-artifact@v3
         with:
-          name: nightly-libtiledb
+          name: nightly-libtiledb-linux
           path: install
       - name: Set up Python
         uses: actions/setup-python@v2
@@ -88,19 +88,18 @@ jobs:
       - name: Download nightly-libtiledb
         uses: actions/download-artifact@v3
         with:
-          name: nightly-libtiledb
+          name: nightly-libtiledb-linux
           path: install
       - name: Bootstrap
         run: ./.github/r-ci.sh bootstrap
-
       - name: Dependencies
         run: ./.github/r-ci.sh install_all
-
       - name: Build
         run: R CMD build --no-manual --no-build-vignettes .
       - name: Install
-        run: R CMD INSTALL --configure-args=--with-tiledb=$GITHUB_WORKSPACE/install --build tiledb_*.tar.gz
-
+        run: |
+          R CMD INSTALL --configure-args=--with-tiledb=$GITHUB_WORKSPACE/install --build tiledb_*.tar.gz
+          ls -R
       - name: Test
         run: R -e 'tinytest::test_package("tiledb")'
   tiledb-vcf:
@@ -145,7 +144,7 @@ jobs:
       - name: Download nightly-libtiledb
         uses: actions/download-artifact@v3
         with:
-          name: nightly-libtiledb
+          name: nightly-libtiledb-linux
           path: install
       - name: Install dependencies
         run: go get -t .
