@@ -68,7 +68,7 @@ jobs:
       - name: Clone TileDB-MariaDB
         uses: actions/checkout@v3
         with:
-          repository: single-cell-data/TileDB-MariaDB
+          repository: TileDB-Inc/TileDB-MariaDB
           ref: master
           path: TileDB-MariaDB
   tiledb-go:
@@ -78,6 +78,6 @@ jobs:
       - name: Clone TileDB-Go
         uses: actions/checkout@v3
         with:
-          repository: single-cell-data/TileDB-Go
+          repository: TileDB-Inc/TileDB-Go
           ref: master
           path: TileDB-Go
