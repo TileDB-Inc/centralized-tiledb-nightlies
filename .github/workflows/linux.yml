@@ -56,7 +56,7 @@ jobs:
       - name: Build TileDB-Py
         run: |
           cd TileDB-Py
-          python setup.py install --tiledb="install/"
+          python setup.py install --tiledb="$GITHUB_WORKSPACE/install/"
       - name: Test TileDB-Py
         run: pytest -vv
   tiledb-r:
