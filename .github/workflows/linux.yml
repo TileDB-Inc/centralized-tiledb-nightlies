@@ -143,4 +143,16 @@ jobs:
         with:
           repository: TileDB-Inc/TileDB-Go
           ref: master
-          path: TileDB-Go
+      - name: Download nightly-libtiledb
+        uses: actions/download-artifact@v3
+        with:
+          name: nightly-libtiledb
+          path: install
+      - name: Install dependencies
+        run: go get -t .
+      - name: Test TileDB-Go
+        run: |
+          export CPATH=$GITHUB_WORKSPACE/install/include
+          export LIBRARY_PATH=$GITHUB_WORKSPACE/install/lib
+          export LD_LIBRARY_PATH=$GITHUB_WORKSPACE/install/lib
+          go test -v ./...
