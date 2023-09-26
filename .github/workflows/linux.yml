@@ -89,13 +89,13 @@ jobs:
           name: nightly-libtiledb
           path: install
       - name: Bootstrap
-        run: ./scripts/r-ci.sh bootstrap
+        run: ./.github/r-ci.sh bootstrap
 
       - name: Dependencies
-        run: ./scripts/r-ci.sh install_all
+        run: ./.github/r-ci.sh install_all
 
       - name: Test
-        run: ./scripts/r-ci.sh run_tests
+        run: ./.github/r-ci.sh run_tests
 
       - name: Show install log
         run: cat $HOME/work/TileDB-R/TileDB-R/tiledb.Rcheck/00install.out
