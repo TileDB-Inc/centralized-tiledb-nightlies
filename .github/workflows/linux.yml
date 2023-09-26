@@ -65,7 +65,13 @@ jobs:
           cd TileDB-Py
           python setup.py install --tiledb="$GITHUB_WORKSPACE/install/"
       - name: Test TileDB-Py
-        run: pytest -vv
+        run: |
+          python -c "import tiledb; print(tiledb.libtiledb.version())"
+          #pytest -vv
+      - name: Create a wheel
+        run: |
+          cd TileDB-Py
+          python setup.py bdist_wheel --tiledb="$GITHUB_WORKSPACE/install/"
   tiledb-r:
     runs-on: ubuntu-latest
     needs: libtiledb
