@@ -40,7 +40,7 @@ jobs:
     runs-on: ubuntu-latest
     needs: libtiledb
     env:
-      LD_LIBRARY_PATH: ${{ github.workspace }}/install
+      LD_LIBRARY_PATH: ${{ github.workspace }}/install/lib
     steps:
       - name: Clone TileDB-Py
         uses: actions/checkout@v3
@@ -61,6 +61,7 @@ jobs:
         run: python -m pip install --upgrade -r TileDB-Py/misc/requirements_ci.txt
       - name: Build TileDB-Py
         run: |
+          echo $LD_LIBRARY_PATH
           cd TileDB-Py
           python setup.py install --tiledb="$GITHUB_WORKSPACE/install/"
       - name: Test TileDB-Py
@@ -80,6 +81,8 @@ jobs:
         with:
           name: nightly-libtiledb
           path: install
+      - name: Available R
+        run: which -a R
   tiledb-vcf:
     runs-on: ubuntu-latest
     needs: [libtiledb, tiledb-py]
