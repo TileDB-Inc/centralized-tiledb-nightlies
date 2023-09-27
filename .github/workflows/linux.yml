@@ -40,21 +40,6 @@ jobs:
             install/include/
             install/lib*/
           retention-days: 14
-      - name: Upload libtiledb build directory as artifact
-        uses: actions/upload-artifact@v3
-        with:
-          name: nightly-libtiledb-build-linux
-          path: build
-          retention-days: 3
-  libtiledb-test:
-    runs-on: ubuntu-latest
-    needs: libtiledb
-    steps:
-      - name: Download libtiledb build directory
-        uses: actions/download-artifact@v3
-        with:
-          name: nightly-libtiledb-build-linux
-          path: build
       - name: Test TileDB
         run: cmake --build build --target check --config Release
   tiledb-py:
