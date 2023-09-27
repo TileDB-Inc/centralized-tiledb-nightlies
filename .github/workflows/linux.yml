@@ -173,7 +173,7 @@ jobs:
       - name: libtiledbvcf version
         run: ./install-libtiledbvcf/bin/tiledbvcf version
       - name: Confirm linking
-        run: ldd install-libtiledbvcf/lib/libtiledbvcf.so | grep libtiledb
+        run: ldd install-libtiledbvcf/lib/libtiledbvcf.so | grep libtiledb.so
       - name: Install bcftools (for tests)
         run: sudo apt install bcftools
       - name: Test libtiledbvcf
@@ -216,9 +216,8 @@ jobs:
             -D CMAKE_BUILD_TYPE=Release \
             -D CMAKE_PREFIX_PATH=$GITHUB_WORKSPACE/install-libtiledb/ \
             -D CMAKE_INSTALL_PREFIX:PATH=$GITHUB_WORKSPACE/install-libtiledbsoma/ \
-            -D DOWNLOAD_TILEDB_PREBUILT=OFF \
-            -D CMAKE_INSTALL_PREFIX=${prefix} \
             -D OVERRIDE_INSTALL_PREFIX=OFF \
+            -D DOWNLOAD_TILEDB_PREBUILT=OFF \
             -D FORCE_BUILD_TILEDB=OFF
       - name: Build libtiledbsoma
         run: cmake --build build-libtiledbsoma -j2
