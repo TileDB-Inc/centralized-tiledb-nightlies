@@ -33,18 +33,25 @@ jobs:
         with:
           repository: TileDB-Inc/TileDB
           ref: ${{ github.event.inputs.LIBTILEDB_REF || 'dev' }}
-      - name: Configure TileDB
+      - name: Download release tarball
+        run: wget https://github.com/TileDB-Inc/TileDB/releases/download/2.17.1/tiledb-linux-x86_64-2.17.1-7c8c73b.tar.gz
+      - name: Unpack release tarball
         run: |
-          cmake -B build-libtiledb \
-            -D CMAKE_INSTALL_PREFIX:PATH=$GITHUB_WORKSPACE/install-libtiledb/ \
-            -D TILEDB_VCPKG=OFF \
-            -D TILEDB_WERROR=ON \
-            -D TILEDB_SERIALIZATION=ON \
-            -D CMAKE_BUILD_TYPE=Release
-      - name: Build TileDB
-        run: cmake --build build-libtiledb -j2 --config Release
-      - name: Install TileDB
-        run: cmake --build build-libtiledb --config Release --target install-tiledb
+          mkdir install-libtiledb
+          tar xzf tiledb-linux-x86_64-*.tar.gz -C install-libtiledb
+          ls -R install-libtiledb/
+      # - name: Configure TileDB
+      #   run: |
+      #     cmake -B build-libtiledb \
+      #       -D CMAKE_INSTALL_PREFIX:PATH=$GITHUB_WORKSPACE/install-libtiledb/ \
+      #       -D TILEDB_VCPKG=OFF \
+      #       -D TILEDB_WERROR=ON \
+      #       -D TILEDB_SERIALIZATION=ON \
+      #       -D CMAKE_BUILD_TYPE=Release
+      # - name: Build TileDB
+      #   run: cmake --build build-libtiledb -j2 --config Release
+      # - name: Install TileDB
+      #   run: cmake --build build-libtiledb --config Release --target install-tiledb
       - name: Upload libtiledb as artifact
         uses: actions/upload-artifact@v3
         with:
@@ -53,8 +60,8 @@ jobs:
             install-libtiledb/include/
             install-libtiledb/lib*/
           retention-days: 14
-      - name: Test TileDB
-        run: cmake --build build-libtiledb --target check --config Release
+      # - name: Test TileDB
+      #   run: cmake --build build-libtiledb --target check --config Release
   tiledb-py:
     runs-on: ubuntu-latest
     needs: libtiledb
