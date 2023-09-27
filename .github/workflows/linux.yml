@@ -186,16 +186,61 @@ jobs:
           repository: TileDB-Inc/TileDB-VCF
           ref: main
           path: TileDB-VCF
-  tiledb-soma:
+  libtiledbsoma:
     runs-on: ubuntu-latest
-    needs: [libtiledb, tiledb-py, tiledb-r]
+    needs: [libtiledb]
     steps:
       - name: Clone TileDB-SOMA
         uses: actions/checkout@v3
         with:
           repository: single-cell-data/TileDB-SOMA
           ref: main
-          path: TileDB-SOMA
+      - name: Download nightly-libtiledb
+        uses: actions/download-artifact@v3
+        with:
+          name: nightly-libtiledb-linux
+          path: install-libtiledb
+      - name: Configure libtiledbsoma
+        run: |
+          cmake -S libtiledbsoma -B build-libtiledbsoma \
+            -D CMAKE_BUILD_TYPE=Release \
+            -D CMAKE_PREFIX_PATH=$GITHUB_WORKSPACE/install-libtiledb/ \
+            -D CMAKE_INSTALL_PREFIX:PATH=$GITHUB_WORKSPACE/install-libtiledbsoma/ \
+            -D DOWNLOAD_TILEDB_PREBUILT=OFF \
+            -D CMAKE_INSTALL_PREFIX=${prefix} \
+            -D OVERRIDE_INSTALL_PREFIX=OFF \
+            -D FORCE_BUILD_TILEDB=OFF
+      - name: Build libtiledbsoma
+        run: cmake --build build-libtiledbsoma -j2
+      - name: Install libtiledbsoma
+        run: cmake --build build-libtiledbsoma --target install-libtiledbsoma
+      - name: Upload libtiledbsoma as artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: nightly-libtiledbsoma-linux
+          path: |
+            install-libtiledbsoma/include/
+            install-libtiledbsoma/lib*/
+      - name: Test libtiledbsoma
+        run: cmake --build build-libtiledbsoma/libtiledbsoma --target build_tests -j2
+  tiledbsoma-py:
+    runs-on: ubuntu-latest
+    needs: [libtiledb, libtiledbsoma, tiledb-py]
+    steps:
+      - name: Clone TileDB-SOMA
+        uses: actions/checkout@v3
+        with:
+          repository: single-cell-data/TileDB-SOMA
+          ref: main
+  tiledbsoma-r:
+    runs-on: ubuntu-latest
+    needs: [libtiledb, libtiledbsoma, tiledb-r]
+    steps:
+      - name: Clone TileDB-SOMA
+        uses: actions/checkout@v3
+        with:
+          repository: single-cell-data/TileDB-SOMA
+          ref: main
   tiledb-mariadb:
     runs-on: ubuntu-latest
     needs: [libtiledb]
