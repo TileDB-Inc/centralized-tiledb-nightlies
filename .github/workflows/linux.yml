@@ -22,31 +22,31 @@ jobs:
           ref: dev
       - name: Configure TileDB
         run: |
-          cmake -B build \
-            -D CMAKE_INSTALL_PREFIX:PATH=$GITHUB_WORKSPACE/install/ \
+          cmake -B build-libtiledb \
+            -D CMAKE_INSTALL_PREFIX:PATH=$GITHUB_WORKSPACE/install-libtiledb/ \
             -D TILEDB_VCPKG=OFF \
             -D TILEDB_WERROR=ON \
             -D TILEDB_SERIALIZATION=ON \
             -D CMAKE_BUILD_TYPE=Release
       - name: Build TileDB
-        run: cmake --build build -j2 --config Release
+        run: cmake --build build-libtiledb -j2 --config Release
       - name: Install TileDB
-        run: cmake --build build --config Release --target install-tiledb
+        run: cmake --build build-libtiledb --config Release --target install-tiledb
       - name: Upload libtiledb as artifact
         uses: actions/upload-artifact@v3
         with:
           name: nightly-libtiledb-linux
           path: |
-            install/include/
-            install/lib*/
+            install-libtiledb/include/
+            install-libtiledb/lib*/
           retention-days: 14
       - name: Test TileDB
-        run: cmake --build build --target check --config Release
+        run: cmake --build build-libtiledb --target check --config Release
   tiledb-py:
     runs-on: ubuntu-latest
     needs: libtiledb
     env:
-      LD_LIBRARY_PATH: ${{ github.workspace }}/install/lib
+      LD_LIBRARY_PATH: ${{ github.workspace }}/install-libtiledb/lib
     steps:
       - name: Clone TileDB-Py
         uses: actions/checkout@v3
@@ -57,7 +57,7 @@ jobs:
         uses: actions/download-artifact@v3
         with:
           name: nightly-libtiledb-linux
-          path: install
+          path: install-libtiledb
       - name: Set up Python
         uses: actions/setup-python@v2
         with:
@@ -67,14 +67,14 @@ jobs:
       - name: Build TileDB-Py
         run: |
           echo $LD_LIBRARY_PATH
-          python setup.py install --tiledb="$GITHUB_WORKSPACE/install/"
+          python setup.py install --tiledb="$GITHUB_WORKSPACE/install-libtiledb/"
       - name: Test TileDB-Py
         run: |
           python -c "import tiledb; print(tiledb.libtiledb.version())"
           #pytest -vv
       - name: Create a wheel
         run: |
-          python setup.py bdist_wheel --tiledb="$GITHUB_WORKSPACE/install/"
+          python setup.py bdist_wheel --tiledb="$GITHUB_WORKSPACE/install-libtiledb/"
       - name: Upload Python wheel as artifact
         uses: actions/upload-artifact@v3
         with:
@@ -96,7 +96,7 @@ jobs:
         uses: actions/download-artifact@v3
         with:
           name: nightly-libtiledb-linux
-          path: install
+          path: install-libtiledb
       - name: Bootstrap
         run: ./.github/r-ci.sh bootstrap
       - name: Dependencies
@@ -105,7 +105,7 @@ jobs:
         run: R CMD build --no-manual --no-build-vignettes .
       - name: Install
         run: |
-          R CMD INSTALL --configure-args=--with-tiledb=$GITHUB_WORKSPACE/install --build tiledb_*.tar.gz
+          R CMD INSTALL --configure-args=--with-tiledb=$GITHUB_WORKSPACE/install-libtiledb --build tiledb_*.tar.gz
       - name: Upload R binary tarball as artifact
         uses: actions/upload-artifact@v3
         with:
@@ -114,9 +114,58 @@ jobs:
           retention-days: 14
       - name: Test
         run: R -e 'tinytest::test_package("tiledb")'
-  tiledb-vcf:
+  libtiledbvcf:
     runs-on: ubuntu-latest
-    needs: [libtiledb, tiledb-py]
+    needs: libtiledb
+    steps:
+      - name: Clone TileDB-VCF
+        uses: actions/checkout@v3
+        with:
+          repository: TileDB-Inc/TileDB-VCF
+          ref: main
+          path: TileDB-VCF
+      - name: Download nightly-libtiledb
+        uses: actions/download-artifact@v3
+        with:
+          name: nightly-libtiledb-linux
+          path: install-libtiledb
+      - name: Configure libtiledbvcf
+        run: |
+          cmake -S TileDB-VCF/libtiledbvcf -B build-libtiledbvcf \
+            -D CMAKE_BUILD_TYPE=Release \
+            -D CMAKE_PREFIX_PATH=$GITHUB_WORKSPACE/install-libtiledb/ \
+            -D CMAKE_INSTALL_PREFIX:PATH=$GITHUB_WORKSPACE/install-libtiledbvcf/ \
+            -D OVERRIDE_INSTALL_PREFIX=OFF \
+            -D TILEDB_WERROR=OFF
+      - name: Build libtiledbvcf
+        run: cmake --build build-libtiledbvcf -j2 --config Release
+      - name: Install libtiledbvcf
+        run: cmake --build build-libtiledbvcf --config Release --target install-libtiledbvcf
+      - name: Upload libtiledbvcf as artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: nightly-libtiledbvcf-linux
+          path: |
+            install-libtiledbvcf/include/
+            install-libtiledbvcf/lib*/
+          retention-days: 14
+      - name: libtiledbvcf version
+        run: ./install-libtiledbvcf/bin/tiledbvcf version
+      - name: Confirm linking
+        run: ldd install-libtiledbvcf/lib/libtiledbvcf.so | grep libtiledb
+      - name: Install bcftools (for tests)
+        run: sudo apt install bcftools
+      - name: Test libtiledbvcf
+        run: |
+          make -j2 -C build-libtiledbvcf/libtiledbvcf tiledb_vcf_unit
+          ./build-libtiledbvcf/libtiledbvcf/test/tiledb_vcf_unit
+
+          # cli tests (require bcftools)
+          # USAGE: run-cli-tests.sh <build-dir> <inputs-dir>
+          TileDB-VCF/libtiledbvcf/test/run-cli-tests.sh build-libtiledbvcf TileDB-VCF/libtiledbvcf/test/inputs
+  tiledbvcf-py:
+    runs-on: ubuntu-latest
+    needs: [libtiledb, libtiledbvcf, tiledb-py]
     steps:
       - name: Clone TileDB-VCF
         uses: actions/checkout@v3
@@ -157,12 +206,12 @@ jobs:
         uses: actions/download-artifact@v3
         with:
           name: nightly-libtiledb-linux
-          path: install
+          path: install-libtiledb
       - name: Install dependencies
         run: go get -t .
       - name: Test TileDB-Go
         run: |
-          export CPATH=$GITHUB_WORKSPACE/install/include
-          export LIBRARY_PATH=$GITHUB_WORKSPACE/install/lib
-          export LD_LIBRARY_PATH=$GITHUB_WORKSPACE/install/lib
+          export CPATH=$GITHUB_WORKSPACE/install-libtiledb/include
+          export LIBRARY_PATH=$GITHUB_WORKSPACE/install-libtiledb/lib
+          export LD_LIBRARY_PATH=$GITHUB_WORKSPACE/install-libtiledb/lib
           go test -v ./...
