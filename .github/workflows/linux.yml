@@ -31,7 +31,7 @@ jobs:
       - name: Build TileDB
         run: cmake --build build -j2 --config Release
       - name: Install TileDB
-        run: cmake --build build-libtiledb --config Release --target install-tiledb
+        run: cmake --build build --config Release --target install-tiledb
       - name: Upload libtiledb as artifact
         uses: actions/upload-artifact@v3
         with:
