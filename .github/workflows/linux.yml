@@ -73,6 +73,7 @@ jobs:
         with:
           repository: TileDB-Inc/TileDB-Py
           ref: ${{ github.event.inputs.TILEDB_PY_REF || 'dev' }}
+          fetch-depth: 0 # fetch everything for python setuptools_scm
       - name: Download nightly-libtiledb
         uses: actions/download-artifact@v3
         with:
