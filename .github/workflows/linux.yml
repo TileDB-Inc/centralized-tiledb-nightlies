@@ -219,7 +219,7 @@ jobs:
           dask \
           distributed \
           'fsspec<2023.3.0' \
-          pyarrow \
+          pyarrow==11 \
           pandas \
           pybind11 \
           pytest \
