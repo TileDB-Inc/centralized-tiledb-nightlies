@@ -228,10 +228,6 @@ jobs:
           setuptools_scm \
           setuptools_scm_git_archive \
           wheel
-      - name: Apply patch for -std=c++17
-        run: |
-          wget https://raw.githubusercontent.com/TileDB-Inc/tiledb-vcf-feedstock/1d9e223924eb5b8dc9b00846411d0dbecf76cd8e/recipe/0001-Update-python-pybind11-to-use-c-17.patch
-          git apply 0001-Update-python-pybind11-to-use-c-17.patch
       - name: Install nightly tiledb-py
         run: |
           pip install tiledb-*-linux_x86_64.whl
