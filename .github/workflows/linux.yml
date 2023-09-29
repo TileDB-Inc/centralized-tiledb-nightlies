@@ -218,6 +218,7 @@ jobs:
         run: python -m pip install \
           dask \
           distributed \
+          'fsspec<2023.3.0' \
           pyarrow \
           pandas \
           pybind11 \
