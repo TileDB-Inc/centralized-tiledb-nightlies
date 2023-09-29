@@ -57,8 +57,7 @@ jobs:
         with:
           name: nightly-libtiledb-linux
           path: |
-            install-libtiledb/include/
-            install-libtiledb/lib*/
+            install-libtiledb/*
           retention-days: 14
       # - name: Test TileDB
       #   run: cmake --build build-libtiledb --target check --config Release
@@ -338,6 +337,8 @@ jobs:
         run: |
           pip install tiledb-*-linux_x86_64.whl
           pip list
+      - name: Install spdlog
+        run: sudo apt install libspdlog-dev
       - name: Install tiledbsoma-py
         run: |
           python -m pip -v install apis/python
