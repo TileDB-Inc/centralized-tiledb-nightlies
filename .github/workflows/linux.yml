@@ -161,14 +161,15 @@ jobs:
       - name: Build libtiledbvcf
         run: cmake --build build-libtiledbvcf -j2 --config Release
       - name: Install libtiledbvcf
-        run: cmake --build build-libtiledbvcf --config Release --target install-libtiledbvcf
+        run: |
+          cmake --build build-libtiledbvcf --config Release --target install-libtiledbvcf
+          ls -R install-libtiledbvcf/
       - name: Upload libtiledbvcf as artifact
         uses: actions/upload-artifact@v3
         with:
           name: nightly-libtiledbvcf-linux
           path: |
-            install-libtiledbvcf/include/
-            install-libtiledbvcf/lib*/
+            install-libtiledbvcf/*
           retention-days: 14
       - name: libtiledbvcf version
         run: ./install-libtiledbvcf/bin/tiledbvcf version
@@ -286,14 +287,15 @@ jobs:
       - name: Build libtiledbsoma
         run: cmake --build build-libtiledbsoma -j2
       - name: Install libtiledbsoma
-        run: cmake --build build-libtiledbsoma --target install-libtiledbsoma
+        run: |
+          cmake --build build-libtiledbsoma --target install-libtiledbsoma
+          ls -R $GITHUB_WORKSPACE/install-libtiledb/
       - name: Upload libtiledbsoma as artifact
         uses: actions/upload-artifact@v3
         with:
           name: nightly-libtiledbsoma-linux
           path: |
-            install-libtiledbsoma/include/
-            install-libtiledbsoma/lib*/
+            install-libtiledbsoma/*
       - name: Test libtiledbsoma
         run: |
           cmake --build build-libtiledbsoma/libtiledbsoma --target build_tests -j2
