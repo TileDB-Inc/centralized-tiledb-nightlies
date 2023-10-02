@@ -57,7 +57,18 @@ on:
         description: >-
           The Git reference (tag, branch, commit) to checkout TileDB-Inc/TileDB-Go
         default: master
+permissions:
+  contents: write
 jobs:
+  create-release:
+    runs-on: ubuntu-latest
+    name: Create a new release
+    steps:
+      - name: Create release
+        env:
+          GH_TOKEN: ${{ github.token }}
+          TZ: "America/New_York"
+        run: gh release create $(date +%Y-%m-%d)
   libtiledb:
     runs-on: ubuntu-latest
     steps:
@@ -92,6 +103,14 @@ jobs:
           path: |
             install-libtiledb/*
           retention-days: 14
+      - name: Upload libtiledb to release
+        env:
+          GH_TOKEN: ${{ github.token }}
+          TZ: "America/New_York"
+        run: |
+          the_date=$(date +%Y-%m-%d)
+          tar -C install-libtiledb -cvzf libtiledb-${the_date}.tar.gz ./
+          gh release upload ${the_date} libtiledb-${the_date}.tar.gz --clobber
       # - name: Test TileDB
       #   run: cmake --build build-libtiledb --target check --config Release
   tiledb-py:
