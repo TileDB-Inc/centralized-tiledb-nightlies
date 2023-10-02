@@ -442,7 +442,15 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - name: Create release
-        run: gh release create $(date +%Y-%m-%d)
+        run: |
+          the_date=$(date +%Y-%m-%d)
+          if ! gh release list | grep -q $the_date
+          then
+            echo "Creating new release: $the_date"
+            gh release create $the_date
+          else
+            echo "Release already exists: $the_date"
+          fi
   upload-libtiledb:
     runs-on: ubuntu-latest
     needs: [create-release, libtiledb]
