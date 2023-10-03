@@ -206,7 +206,7 @@ jobs:
       - name: libtiledbvcf version
         run: ./install-libtiledbvcf/bin/tiledbvcf version
       - name: Confirm linking
-        run: ldd install-libtiledbvcf/lib/libtiledbvcf.so | grep libtiledb.so
+        run: ldd install-libtiledbvcf/lib/libtiledbvcf.so
       - name: Install bcftools (for tests)
         run: sudo apt install bcftools
       - name: Test libtiledbvcf
@@ -269,6 +269,8 @@ jobs:
           echo $LD_LIBRARY_PATH
           cd apis/python
           python setup.py install --libtiledbvcf=$GITHUB_WORKSPACE/install-libtiledbvcf/
+      - name: Confirm linking
+        run: ldd $pythonLocation/lib/python*/site-packages/tiledbvcf-*-py*-linux-x86_64.egg/tiledbvcf/libtiledbvcf.cpython-*-x86_64-linux-gnu.so
       - name: Install bcftools (for tests)
         run: sudo apt install bcftools
       - name: Test tiledbvcf-py
@@ -324,6 +326,8 @@ jobs:
           name: nightly-libtiledbsoma-linux
           path: |
             install-libtiledbsoma/*
+      - name: Confirm linking
+        run: ldd install-libtiledbsoma/lib/libtiledbsoma.so
       - name: Test libtiledbsoma
         run: |
           cmake --build build-libtiledbsoma/libtiledbsoma --target build_tests -j2
