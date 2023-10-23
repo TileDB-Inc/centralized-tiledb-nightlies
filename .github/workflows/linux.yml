@@ -450,7 +450,7 @@ jobs:
       - name: Create release
         run: |
           the_date=$(date +%Y-%m-%d)
-          if ! gh release list | grep -q $the_date
+          if ! gh release list | cut -f3 | grep -q $the_date
           then
             echo "Creating new release: $the_date"
             gh release create $the_date
