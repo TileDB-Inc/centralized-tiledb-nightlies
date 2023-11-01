@@ -212,7 +212,7 @@ jobs:
       - name: Confirm linking
         run: ldd install-libtiledbvcf/lib/libtiledbvcf.so
       - name: Install bcftools (for tests)
-        run: sudo apt install bcftools
+        run: sudo apt-get install --yes bcftools
       - name: Test libtiledbvcf
         run: |
           make -j2 -C build-libtiledbvcf/libtiledbvcf tiledb_vcf_unit
@@ -276,7 +276,9 @@ jobs:
       - name: Confirm linking
         run: ldd $pythonLocation/lib/python*/site-packages/tiledbvcf-*-py*-linux-x86_64.egg/tiledbvcf/libtiledbvcf.cpython-*-x86_64-linux-gnu.so
       - name: Install bcftools (for tests)
-        run: sudo apt install bcftools
+        run: |
+          sudo apt-get update
+          sudo apt-get install --yes bcftools
       - name: Test tiledbvcf-py
         run: |
           python -c "import tiledbvcf; print(tiledbvcf.version)"
@@ -383,7 +385,9 @@ jobs:
           pip install tiledb-*-linux_x86_64.whl
           pip list
       - name: Install spdlog
-        run: sudo apt install libspdlog-dev
+        run: |
+          sudo apt-get update
+          sudo apt-get install --yes libspdlog-dev
       - name: Install tiledbsoma-py
         run: |
           python -m pip -v install apis/python
