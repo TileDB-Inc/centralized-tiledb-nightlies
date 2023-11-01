@@ -437,6 +437,15 @@ jobs:
           export LIBRARY_PATH=$(pwd)/install-libtiledb/lib
           export LD_LIBRARY_PATH=$(pwd)/install-libtiledb/lib
           go test -v ./...
+  build-all:
+    # this is simply a target to build everything locally with `act` without
+    # creating a new release
+    name: Build everything
+    runs-on: ubuntu-latest
+    needs: [libtiledb, tiledb-py, tiledb-r, libtiledbvcf, tiledbvcf-py, libtiledbsoma,
+            tiledbsoma-py, tiledbsoma-r, tiledb-mariadb, tiledb-go]
+    steps:
+      - run: echo "Success! Everything was built"
   create-release:
     name: Create a new release
     runs-on: ubuntu-latest
