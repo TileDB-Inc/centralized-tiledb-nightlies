@@ -182,6 +182,10 @@ jobs:
         with:
           name: nightly-libtiledb-linux
           path: install-libtiledb
+      - name: Setup
+        run: |
+          sudo apt-get update
+          sudo apt-get install --yes cmake
       - name: Configure libtiledbvcf
         run: |
           cmake -S libtiledbvcf -B build-libtiledbvcf \
@@ -305,6 +309,10 @@ jobs:
         with:
           name: nightly-libtiledb-linux
           path: install-libtiledb
+      - name: Setup
+        run: |
+          sudo apt-get update
+          sudo apt-get install --yes cmake
       - name: Configure libtiledbsoma
         run: |
           cmake -S libtiledbsoma -B build-libtiledbsoma \
