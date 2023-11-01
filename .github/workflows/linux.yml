@@ -76,7 +76,7 @@ jobs:
       # - name: Configure TileDB
       #   run: |
       #     cmake -B build-libtiledb \
-      #       -D CMAKE_INSTALL_PREFIX:PATH=$GITHUB_WORKSPACE/install-libtiledb/ \
+      #       -D CMAKE_INSTALL_PREFIX:PATH=$(pwd)/install-libtiledb/ \
       #       -D TILEDB_VCPKG=OFF \
       #       -D TILEDB_WERROR=ON \
       #       -D TILEDB_SERIALIZATION=ON \
@@ -120,13 +120,13 @@ jobs:
       - name: Build TileDB-Py
         run: |
           echo $LD_LIBRARY_PATH
-          python setup.py install --tiledb=$GITHUB_WORKSPACE/install-libtiledb/
+          python setup.py install --tiledb=$(pwd)/install-libtiledb/
       # - name: Test TileDB-Py
       #   run: |
       #     python -c "import tiledb; print(tiledb.libtiledb.version())"
       #     pytest -vv
       - name: Create a wheel
-        run: python setup.py bdist_wheel --tiledb=$GITHUB_WORKSPACE/install-libtiledb/
+        run: python setup.py bdist_wheel --tiledb=$(pwd)/install-libtiledb/
       - name: Upload Python wheel as artifact
         uses: actions/upload-artifact@v3
         with:
@@ -157,7 +157,7 @@ jobs:
         run: R CMD build --no-manual --no-build-vignettes .
       - name: Install
         run: |
-          R CMD INSTALL --configure-args=--with-tiledb=$GITHUB_WORKSPACE/install-libtiledb --build tiledb_*.tar.gz
+          R CMD INSTALL --configure-args=--with-tiledb=$(pwd)/install-libtiledb --build tiledb_*.tar.gz
       - name: Upload R binary tarball as artifact
         uses: actions/upload-artifact@v3
         with:
@@ -186,8 +186,8 @@ jobs:
         run: |
           cmake -S libtiledbvcf -B build-libtiledbvcf \
             -D CMAKE_BUILD_TYPE=Release \
-            -D CMAKE_PREFIX_PATH=$GITHUB_WORKSPACE/install-libtiledb/ \
-            -D CMAKE_INSTALL_PREFIX:PATH=$GITHUB_WORKSPACE/install-libtiledbvcf/ \
+            -D CMAKE_PREFIX_PATH=$(pwd)/install-libtiledb/ \
+            -D CMAKE_INSTALL_PREFIX:PATH=$(pwd)/install-libtiledbvcf/ \
             -D OVERRIDE_INSTALL_PREFIX=OFF \
             -D TILEDB_WERROR=OFF
       - name: Build libtiledbvcf
@@ -268,7 +268,7 @@ jobs:
         run: |
           echo $LD_LIBRARY_PATH
           cd apis/python
-          python setup.py install --libtiledbvcf=$GITHUB_WORKSPACE/install-libtiledbvcf/
+          python setup.py install --libtiledbvcf=$(pwd)/install-libtiledbvcf/
       - name: Confirm linking
         run: ldd $pythonLocation/lib/python*/site-packages/tiledbvcf-*-py*-linux-x86_64.egg/tiledbvcf/libtiledbvcf.cpython-*-x86_64-linux-gnu.so
       - name: Install bcftools (for tests)
@@ -281,7 +281,7 @@ jobs:
       - name: Create a wheel
         run: |
           cd apis/python
-          python setup.py bdist_wheel --libtiledbvcf=$GITHUB_WORKSPACE/install-libtiledbvcf/
+          python setup.py bdist_wheel --libtiledbvcf=$(pwd)/install-libtiledbvcf/
       - name: Upload Python wheel as artifact
         uses: actions/upload-artifact@v3
         with:
@@ -309,8 +309,8 @@ jobs:
         run: |
           cmake -S libtiledbsoma -B build-libtiledbsoma \
             -D CMAKE_BUILD_TYPE=Release \
-            -D CMAKE_PREFIX_PATH=$GITHUB_WORKSPACE/install-libtiledb/ \
-            -D CMAKE_INSTALL_PREFIX:PATH=$GITHUB_WORKSPACE/install-libtiledbsoma/ \
+            -D CMAKE_PREFIX_PATH=$(pwd)/install-libtiledb/ \
+            -D CMAKE_INSTALL_PREFIX:PATH=$(pwd)/install-libtiledbsoma/ \
             -D OVERRIDE_INSTALL_PREFIX=OFF \
             -D DOWNLOAD_TILEDB_PREBUILT=OFF \
             -D FORCE_BUILD_TILEDB=OFF
@@ -319,7 +319,7 @@ jobs:
       - name: Install libtiledbsoma
         run: |
           cmake --build build-libtiledbsoma --target install-libtiledbsoma
-          ls -R $GITHUB_WORKSPACE/install-libtiledb/
+          ls -R $(pwd)/install-libtiledb/
       - name: Upload libtiledbsoma as artifact
         uses: actions/upload-artifact@v3
         with:
@@ -433,9 +433,9 @@ jobs:
         run: go get -t .
       - name: Test TileDB-Go
         run: |
-          export CPATH=$GITHUB_WORKSPACE/install-libtiledb/include
-          export LIBRARY_PATH=$GITHUB_WORKSPACE/install-libtiledb/lib
-          export LD_LIBRARY_PATH=$GITHUB_WORKSPACE/install-libtiledb/lib
+          export CPATH=$(pwd)/install-libtiledb/include
+          export LIBRARY_PATH=$(pwd)/install-libtiledb/lib
+          export LD_LIBRARY_PATH=$(pwd)/install-libtiledb/lib
           go test -v ./...
   create-release:
     name: Create a new release
