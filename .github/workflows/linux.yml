@@ -82,7 +82,7 @@ jobs:
       #       -D TILEDB_SERIALIZATION=ON \
       #       -D CMAKE_BUILD_TYPE=Release
       # - name: Build TileDB
-      #   run: cmake --build build-libtiledb -j2 --config Release
+      #   run: cmake --build build-libtiledb -j $(nproc) --config Release
       # - name: Install TileDB
       #   run: cmake --build build-libtiledb --config Release --target install-tiledb
       - name: Upload libtiledb as artifact
@@ -195,7 +195,7 @@ jobs:
             -D OVERRIDE_INSTALL_PREFIX=OFF \
             -D TILEDB_WERROR=OFF
       - name: Build libtiledbvcf
-        run: cmake --build build-libtiledbvcf -j2 --config Release
+        run: cmake --build build-libtiledbvcf -j $(nproc) --config Release
       - name: Install libtiledbvcf
         run: |
           cmake --build build-libtiledbvcf --config Release --target install-libtiledbvcf
@@ -215,7 +215,7 @@ jobs:
         run: sudo apt-get install --yes bcftools
       - name: Test libtiledbvcf
         run: |
-          make -j2 -C build-libtiledbvcf/libtiledbvcf tiledb_vcf_unit
+          make -j $(nproc) -C build-libtiledbvcf/libtiledbvcf tiledb_vcf_unit
           ./build-libtiledbvcf/libtiledbvcf/test/tiledb_vcf_unit
 
           # cli tests (require bcftools)
@@ -325,7 +325,7 @@ jobs:
             -D DOWNLOAD_TILEDB_PREBUILT=OFF \
             -D FORCE_BUILD_TILEDB=OFF
       - name: Build libtiledbsoma
-        run: cmake --build build-libtiledbsoma -j2
+        run: cmake --build build-libtiledbsoma -j $(nproc)
       - name: Install libtiledbsoma
         run: |
           cmake --build build-libtiledbsoma --target install-libtiledbsoma
@@ -340,7 +340,7 @@ jobs:
         run: ldd install-libtiledbsoma/lib/libtiledbsoma.so
       - name: Test libtiledbsoma
         run: |
-          cmake --build build-libtiledbsoma/libtiledbsoma --target build_tests -j2
+          cmake --build build-libtiledbsoma/libtiledbsoma --target build_tests -j $(nproc)
           ctest --test-dir build-libtiledbsoma/libtiledbsoma -C Release --verbose --rerun-failed --output-on-failure
   tiledbsoma-py:
     runs-on: ubuntu-latest
