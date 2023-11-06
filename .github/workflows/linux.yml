@@ -398,8 +398,8 @@ jobs:
           tar zxf soco.tgz
           cd ..
           # Run test suite
-          cd apis/python
-          pytest
+          PYTHONPATH=$(pwd)/apis/python/src python -m pytest libtiledbsoma/test
+          PYTHONPATH=$(pwd)/apis/python/src python -m pytest apis/python/tests
       - name: Create a wheel
         run: |
           cd apis/python
