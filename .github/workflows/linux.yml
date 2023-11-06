@@ -393,6 +393,11 @@ jobs:
       - name: Test tiledbsoma-py
         run: |
           python -c "import tiledbsoma; print(tiledbsoma.pytiledbsoma.version())"
+          # Obtain test data
+          cd test
+          tar zxf soco.tgz
+          cd ..
+          # Run test suite
           cd apis/python
           pytest
       - name: Create a wheel
