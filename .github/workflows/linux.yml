@@ -415,6 +415,7 @@ jobs:
     needs: [libtiledb, libtiledbsoma, tiledb-r]
     env:
       LD_LIBRARY_PATH: "${{ github.workspace }}/install-libtiledb/lib:${{ github.workspace }}/install-libtiledbsoma/lib"
+      PKG_CONFIG_PATH: "${{ github.workspace }}/install-libtiledb/lib/pkgconfig:${{ github.workspace }}/install-libtiledbsoma/lib/pkgconfig"
     steps:
       - name: Clone TileDB-SOMA
         uses: actions/checkout@v3
