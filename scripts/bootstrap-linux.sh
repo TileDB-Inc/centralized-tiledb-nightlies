@@ -5,7 +5,7 @@ set -eu
 #
 # defaults to current date
 #
-# Warning: modifies LD_LIBRARY_PATH
+# Warning: modifies LD_LIBRARY_PATH and PKG_CONFIG_PATH
 
 the_date=${1-$(date +%Y-%m-%d)}
 echo "Bootstrapping nightlies from $the_date"
@@ -32,11 +32,28 @@ tar -C "/tmp/nightly-tiledb-$the_date/install-libtiledbsoma" \
 export LD_LIBRARY_PATH="/tmp/nightly-tiledb-$the_date/install-libtiledb/lib:${LD_LIBRARY_PATH-}"
 export LD_LIBRARY_PATH="/tmp/nightly-tiledb-$the_date/install-libtiledbvcf/lib:${LD_LIBRARY_PATH-}"
 export LD_LIBRARY_PATH="/tmp/nightly-tiledb-$the_date/install-libtiledbsoma/lib:${LD_LIBRARY_PATH-}"
+echo "LD_LIBRARY_PATH=$LD_LIBRARY_PATH"
 
 ldd /tmp/nightly-tiledb-$the_date/install-libtiledb/lib/libtiledb.so
 ldd /tmp/nightly-tiledb-$the_date/install-libtiledbvcf/lib/libtiledbvcf.so
 ldd /tmp/nightly-tiledb-$the_date/install-libtiledbsoma/lib/libtiledbsoma.so
 
-chmod +x /tmp/nightly-tiledb-$the_date/install-libtiledbvcf/bin/tiledbvcf
+export PKG_CONFIG_PATH="/tmp/nightly-tiledb-$the_date/install-libtiledb/lib/pkgconfig:${PKG_CONFIG_PATH-}"
+export PKG_CONFIG_PATH="/tmp/nightly-tiledb-$the_date/install-libtiledbvcf/lib/pkgconfig:${PKG_CONFIG_PATH-}"
+export PKG_CONFIG_PATH="/tmp/nightly-tiledb-$the_date/install-libtiledbsoma/lib/pkgconfig:${PKG_CONFIG_PATH-}"
+echo "PKG_CONFIG_PATH=$PKG_CONFIG_PATH"
 
-/tmp/nightly-tiledb-$the_date/install-libtiledbvcf/bin/tiledbvcf version
+pkg-config --libs tiledb
+# tiledbvcf doesn't export a tiledbvcf.pc file
+#pkg-config --libs tiledbvcf
+pkg-config --libs tiledbsoma
+
+export PATH="/tmp/nightly-tiledb-$the_date/install-libtiledbvcf/bin:${PATH-}"
+export PATH="/tmp/nightly-tiledb-$the_date/install-libtiledbsoma/bin:${PATH-}"
+echo "PATH=$PATH"
+
+chmod +x /tmp/nightly-tiledb-$the_date/install-libtiledbvcf/bin/tiledbvcf
+chmod +x /tmp/nightly-tiledb-$the_date/install-libtiledbsoma/bin/tdbsoma
+
+tiledbvcf version
+tdbsoma
