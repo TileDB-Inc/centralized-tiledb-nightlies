@@ -73,6 +73,12 @@ jobs:
           mkdir install-libtiledb
           tar xzf tiledb-linux-x86_64-*.tar.gz -C install-libtiledb
           ls -R install-libtiledb/
+      - name: Patch tiledb.pc from release tarball
+        run: |
+          new_prefix=prefix=\"$(pwd)/install-libtiledb\"
+          echo $new_prefix
+          sed -i "1 s+.*+$new_prefix+" install-libtiledb/lib/pkgconfig/tiledb.pc
+          cat install-libtiledb/lib/pkgconfig/tiledb.pc
       # - name: Configure TileDB
       #   run: |
       #     cmake -B build-libtiledb \
