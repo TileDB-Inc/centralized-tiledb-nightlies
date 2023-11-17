@@ -86,7 +86,8 @@ jobs:
       #       -D TILEDB_VCPKG=OFF \
       #       -D TILEDB_WERROR=ON \
       #       -D TILEDB_SERIALIZATION=ON \
-      #       -D CMAKE_BUILD_TYPE=Release
+      #       -D CMAKE_BUILD_TYPE=Release \
+      #       -D VCPKG_TARGET_TRIPLET=x64-linux-release
       # - name: Build TileDB
       #   run: cmake --build build-libtiledb -j $(nproc) --config Release
       # - name: Install TileDB
