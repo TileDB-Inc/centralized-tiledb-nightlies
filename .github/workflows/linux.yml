@@ -129,11 +129,14 @@ jobs:
         run: |
           echo $LD_LIBRARY_PATH
           python setup.py install --tiledb=$(pwd)/install-libtiledb/
-      - name: Test TileDB-Py
+      - name: Import TileDB-Py
         run: |
-          python -c "import tiledb"
+          # Change directory to avoid importing the source files in tiledb/
+          cd ..
+          python -c "import tiledb; print('successful import')"
           python -c "import tiledb; print(tiledb.libtiledb.version())"
-          pytest -vv
+      - name: Test TileDB-Py
+        run: pytest -vv
       - name: Create a wheel
         run: python setup.py bdist_wheel --tiledb=$(pwd)/install-libtiledb/
       - name: Upload Python wheel as artifact
