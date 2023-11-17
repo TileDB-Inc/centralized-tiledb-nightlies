@@ -128,13 +128,12 @@ jobs:
       - name: Build TileDB-Py
         run: |
           echo $LD_LIBRARY_PATH
-          python setup.py install --tiledb=$(pwd)/install-libtiledb/
+          python setup.py develop --tiledb=$(pwd)/install-libtiledb/
       - name: Import TileDB-Py
         run: |
-          # Change directory to avoid importing the source files in tiledb/
-          cd ..
           python -c "import tiledb; print('successful import')"
           python -c "import tiledb; print(tiledb.libtiledb.version())"
+          python -c "import tiledb; print(tiledb.version())"
       - name: Test TileDB-Py
         run: pytest -vv
       - name: Create a wheel
