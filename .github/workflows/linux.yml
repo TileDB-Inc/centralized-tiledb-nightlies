@@ -459,7 +459,13 @@ jobs:
           cd apis/r && R CMD build --no-manual --no-build-vignettes .
       - name: Install
         run:
-          cd apis/r && R CMD INSTALL --install-tests tiledbsoma_*.tar.gz
+          cd apis/r && R CMD INSTALL --install-tests --build tiledbsoma_*.tar.gz
+      - name: Upload R binary tarball as artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: nightly-tiledbsoma-r-linux
+          path: tiledbsoma_*_R_x86_64-pc-linux-gnu.tar.gz
+          retention-days: 14
       - name: Test
         run:
           Rscript -e 'testthat::test_package("tiledbsoma")'
