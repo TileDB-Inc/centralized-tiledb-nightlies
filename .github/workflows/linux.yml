@@ -99,6 +99,7 @@ jobs:
           path: |
             install-libtiledb/*
           retention-days: 14
+          if-no-files-found: error
       # - name: Test TileDB
       #   run: cmake --build build-libtiledb --target check --config Release
   tiledb-py:
@@ -144,6 +145,7 @@ jobs:
           name: nightly-tiledb-py-linux
           path: dist/tiledb-*-linux_x86_64.whl
           retention-days: 14
+          if-no-files-found: error
   tiledb-r:
     runs-on: ubuntu-latest
     needs: libtiledb
@@ -175,6 +177,7 @@ jobs:
           name: nightly-tiledb-r-linux
           path: tiledb_*_R_x86_64-pc-linux-gnu.tar.gz
           retention-days: 14
+          if-no-files-found: error
       - name: Test
         run: R -e 'tinytest::test_package("tiledb")'
   libtiledbvcf:
@@ -218,6 +221,7 @@ jobs:
           path: |
             install-libtiledbvcf/*
           retention-days: 14
+          if-no-files-found: error
       - name: libtiledbvcf version
         run: ./install-libtiledbvcf/bin/tiledbvcf version
       - name: Confirm linking
@@ -305,6 +309,7 @@ jobs:
           name: nightly-tiledbvcf-py-linux
           path: dist/tiledbvcf-*-linux_x86_64.whl
           retention-days: 14
+          if-no-files-found: error
   libtiledbsoma:
     runs-on: ubuntu-latest
     needs: [libtiledb]
@@ -421,6 +426,7 @@ jobs:
           name: nightly-tiledbsoma-py-linux
           path: dist/tiledbsoma-*-linux_x86_64.whl
           retention-days: 14
+          if-no-files-found: error
   tiledbsoma-r:
     runs-on: ubuntu-latest
     needs: [libtiledb, libtiledbsoma, tiledb-r]
@@ -464,8 +470,9 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           name: nightly-tiledbsoma-r-linux
-          path: tiledbsoma_*_R_x86_64-pc-linux-gnu.tar.gz
+          path: apis/r/tiledbsoma_*_R_x86_64-pc-linux-gnu.tar.gz
           retention-days: 14
+          if-no-files-found: error
       - name: Test
         run:
           Rscript -e 'testthat::test_package("tiledbsoma")'
