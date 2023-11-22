@@ -392,11 +392,7 @@ jobs:
         with:
           python-version: "3.11"
       - name: Install dependencies
-        run: python -m pip install \
-          pybind11-global \
-          pytest \
-          'typeguard<3.0' \
-          types-setuptools
+        run: python -m pip install -r apis/python/requirements_dev.txt
       - name: Install nightly tiledb-py
         run: |
           pip install tiledb-*-linux_x86_64.whl
