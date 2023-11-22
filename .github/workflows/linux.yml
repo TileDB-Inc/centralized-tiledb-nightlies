@@ -406,7 +406,9 @@ jobs:
           python -m pip -v install -e apis/python
           pip list
       - name: Confirm linking
-        run: ldd $pythonLocation/lib/python*/site-packages/tiledbsoma/pytiledbsoma.cpython-*-x86_64-linux-gnu.so
+        run: |
+          find $CONDA_PREFIX -name '*.so'
+          find $CONDA_PREFIX -name '*.so' | xargs ldd
       - name: Test tiledbsoma-py
         run: |
           python -c "import tiledbsoma; print('successful import')"
