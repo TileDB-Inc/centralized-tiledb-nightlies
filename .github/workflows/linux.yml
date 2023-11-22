@@ -365,6 +365,7 @@ jobs:
       LD_LIBRARY_PATH: "${{ github.workspace }}/install-libtiledb/lib:${{ github.workspace }}/install-libtiledbsoma/lib"
       TILEDB_PATH: ${{ github.workspace }}/install-libtiledb
       TILEDBSOMA_PATH: ${{ github.workspace }}/install-libtiledbsoma
+      PKG_CONFIG_PATH: "${{ github.workspace }}/install-libtiledb/lib/pkgconfig:${{ github.workspace }}/install-libtiledbsoma/lib/pkgconfig"
     steps:
       - name: Clone TileDB-SOMA
         uses: actions/checkout@v3
@@ -408,7 +409,9 @@ jobs:
         run: ldd $pythonLocation/lib/python*/site-packages/tiledbsoma/pytiledbsoma.cpython-*-x86_64-linux-gnu.so
       - name: Test tiledbsoma-py
         run: |
+          python -c "import tiledbsoma; print('successful import')"
           python -c "import tiledbsoma; print(tiledbsoma.pytiledbsoma.version())"
+          python -c "import tiledbsoma; print(f'tiledbsoma-py={tiledbsoma.__version__}')"
           # Obtain test data
           cd test
           tar zxf soco.tgz
