@@ -403,8 +403,8 @@ jobs:
           pip list
       - name: Confirm linking
         run: |
-          find $CONDA_PREFIX -name '*.so'
-          find $CONDA_PREFIX -name '*.so' | xargs ldd
+          find apis/python -name '*.so'
+          find apis/python -name '*.so' | xargs ldd
       - name: Test tiledbsoma-py
         run: |
           python -c "import tiledbsoma; print('successful import')"
