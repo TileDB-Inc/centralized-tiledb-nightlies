@@ -399,7 +399,8 @@ jobs:
           pip list
       - name: Install tiledbsoma-py
         run: |
-          python -m pip -v install --egg -e apis/python
+          cd apis/python
+          python setup.py develop --single-version-externally-managed
           pip list
       - name: Confirm linking
         run: |
