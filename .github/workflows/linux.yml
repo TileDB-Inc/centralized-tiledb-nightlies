@@ -399,7 +399,7 @@ jobs:
           pip list
       - name: Install tiledbsoma-py
         run: |
-          python -m pip -v install -e apis/python
+          python -m pip -v install --egg -e apis/python
           pip list
       - name: Confirm linking
         run: |
