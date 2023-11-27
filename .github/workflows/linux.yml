@@ -392,7 +392,7 @@ jobs:
         with:
           python-version: "3.11"
       - name: Install dependencies
-        run: python -m pip install -r apis/python/requirements_dev.txt
+        run: python -m pip install -r apis/python/requirements_dev.txt wheel
       - name: Install nightly tiledb-py
         run: |
           pip install tiledb-*-linux_x86_64.whl
