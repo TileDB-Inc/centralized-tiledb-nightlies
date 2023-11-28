@@ -399,13 +399,16 @@ jobs:
           pip list
       - name: Install tiledbsoma-py
         run: |
-          cd apis/python
-          python setup.py develop --single-version-externally-managed
+          python -m pip -v install -e apis/python
           pip list
       - name: Confirm linking
         run: |
           find apis/python -name '*.so'
           find apis/python -name '*.so' | xargs ldd
+      - name: Remove extra libtiledbsoma.so
+        # Deleting this bundled libtiledbsoma.so to ensure the external
+        # shared object is being used in the tests
+        run: rm -f apis/python/src/tiledbsoma/libtiledbsoma.so
       - name: Test tiledbsoma-py
         run: |
           python -c "import tiledbsoma; print('successful import')"
