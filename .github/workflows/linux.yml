@@ -405,6 +405,8 @@ jobs:
         run: |
           find /opt/hostedtoolcache/Python/3.11.6/x64 -iname pybind11.h
           find /opt/hostedtoolcache/Python/3.11.6/x64 -iname numpy.h
+      - name: Confirm INCLUDEPY
+        run: python -c "import sysconfig; print(sysconfig.get_config_var('INCLUDEPY'))"
       - name: Confirm linking
         run: |
           find apis/python -name '*.so'
