@@ -401,6 +401,10 @@ jobs:
         run: |
           python -m pip -v install -e apis/python
           pip list
+      - name: Search for pybind11 headers
+        run: |
+          find /opt/hostedtoolcache/Python/3.11.6/x64 -iname pybind11.h
+          find /opt/hostedtoolcache/Python/3.11.6/x64 -iname numpy.h
       - name: Confirm linking
         run: |
           find apis/python -name '*.so'
