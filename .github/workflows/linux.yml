@@ -405,11 +405,6 @@ jobs:
         run: |
           find /opt/hostedtoolcache/Python/3.11.6/x64 -iname pybind11.h
           find /opt/hostedtoolcache/Python/3.11.6/x64 -iname numpy.h
-      - name: Alternative installation
-        run: |
-          cd apis/python
-          python -m pip install --upgrade build
-          python -m build -n
       - name: Confirm linking
         run: |
           find apis/python -name '*.so'
