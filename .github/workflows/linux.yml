@@ -536,7 +536,9 @@ jobs:
       - name: Inspect build directory
         run: ls -R builddir
       - name: Test TileDB-MariaDB
-        run: ./mysql-test/mysql-test-run.pl --suite=mytile --debug
+        run: |
+          cd builddir
+          ./mysql-test/mysql-test-run.pl --suite=mytile --debug
   tiledb-go:
     runs-on: ubuntu-latest
     needs: [libtiledb]
