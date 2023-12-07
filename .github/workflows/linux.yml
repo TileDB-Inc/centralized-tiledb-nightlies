@@ -515,6 +515,7 @@ jobs:
         run: |
           cmake \
             -S . -B builddir \
+            -D CMAKE_PREFIX_PATH=$(pwd)/install-libtiledb/ \
             -D PLUGIN_OQGRAPH=NO \
             -D WITH_MARIABACKUP=OFF \
             -D PLUGIN_TOKUDB=NO \
@@ -535,10 +536,9 @@ jobs:
           make -j $(nproc)
       - name: Inspect build directory
         run: |
-          du -sh builddir
-          du -sh builddir/storage/mytile
-          find builddir -name '*.so'
-          find builddir -name '*.so' | ldd
+          ls -R builddir/storage/mytile
+          find builddir/storage/mytile -name '*.so'
+          find builddir/storage/mytile -name '*.so' | xargs ldd
       - name: Test TileDB-MariaDB
         run: |
           cd builddir
