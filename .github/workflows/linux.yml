@@ -534,11 +534,12 @@ jobs:
         run: |
           cd builddir
           make -j $(nproc)
-      - name: Inspect build directory
+      - name: Confirm linking
         run: |
-          ls -R builddir/storage/mytile
-          find builddir/storage/mytile -name '*.so'
-          find builddir/storage/mytile -name '*.so' | xargs ldd
+          du -sh builddir
+          du -sh builddir/storage/mytile
+          ldd builddir/storage/mytile/ha_mytile.so | \
+            grep -q $(pwd)/install-libtiledb/lib/libtiledb.so
       - name: Test TileDB-MariaDB
         run: |
           cd builddir
