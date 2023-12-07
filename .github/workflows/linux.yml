@@ -490,12 +490,53 @@ jobs:
   tiledb-mariadb:
     runs-on: ubuntu-latest
     needs: [libtiledb]
+    env:
+      CFLAGS: -Wno-error=deprecated-declarations -Wno-error=missing-braces
+      CXXFLAGS: -Wno-error=deprecated-declarations -Wno-error=missing-braces
+      LD_LIBRARY_PATH: ${{ github.workspace }}/install-libtiledb/lib
     steps:
-      - name: Clone TileDB-MariaDB
+      - name: Clone MariaDB
+        uses: actions/checkout@v3
+        with:
+          repository: MariaDB/server.git
+          ref: mariadb-11.0.2
+      - name: Clone TileDB-MariaDB into MariaDB
         uses: actions/checkout@v3
         with:
           repository: TileDB-Inc/TileDB-MariaDB
           ref: ${{ github.event.inputs.TILEDB_MARIADB_REF || 'master' }}
+          path: storage/mytile
+      - name: Download nightly-libtiledb
+        uses: actions/download-artifact@v3
+        with:
+          name: nightly-libtiledb-linux
+          path: install-libtiledb
+      - name: Configure TileDB-MariaDB
+        run: |
+          cmake \
+            -S . -B builddir \
+            -D PLUGIN_OQGRAPH=NO \
+            -D WITH_MARIABACKUP=OFF \
+            -D PLUGIN_TOKUDB=NO \
+            -D PLUGIN_ROCKSDB=NO \
+            -D PLUGIN_MROONGA=NO \
+            -D PLUGIN_SPIDER=NO \
+            -D PLUGIN_SPHINX=NO \
+            -D PLUGIN_FEDERATED=NO \
+            -D PLUGIN_FEDERATEDX=NO \
+            -D PLUGIN_CONNECT=NO \
+            -D CMAKE_BUILD_TYPE=Debug \
+            -D WITH_DEBUG=1 \
+            -D CMAKE_INCLUDE_PATH="/usr/local/include" \
+            -D TILEDB_FORCE_ALL_DEPS=${TILEDB_FORCE_ALL_DEPS-OFF}
+      - name: Build TileDB-MariaDB
+        run: |
+          cd builddir
+          make -j $(nproc)
+      - name: Inspect build directory
+        run: ls -R builddir
+      - name: Test TileDB-MariaDB
+        run: ./mysql-test/mysql-test-run.pl --suite=mytile --debug
   tiledb-go:
     runs-on: ubuntu-latest
     needs: [libtiledb]
