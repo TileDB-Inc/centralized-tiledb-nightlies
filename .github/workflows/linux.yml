@@ -534,7 +534,11 @@ jobs:
           cd builddir
           make -j $(nproc)
       - name: Inspect build directory
-        run: ls -R builddir
+        run: |
+          du -sh builddir
+          du -sh builddir/storage/mytile
+          find builddir -name '*.so'
+          find builddir -name '*.so' | ldd
       - name: Test TileDB-MariaDB
         run: |
           cd builddir
