@@ -403,8 +403,8 @@ jobs:
           pip list
       - name: Search for pybind11 headers
         run: |
-          find /opt/hostedtoolcache/Python/3.11.6/x64 -iname pybind11.h
-          find /opt/hostedtoolcache/Python/3.11.6/x64 -iname numpy.h
+          find $pythonLocation -iname pybind11.h
+          find $pythonLocation -iname numpy.h
       - name: Confirm INCLUDEPY
         run: python -c "import sysconfig; print(sysconfig.get_config_var('INCLUDEPY'))"
       - name: Confirm linking
