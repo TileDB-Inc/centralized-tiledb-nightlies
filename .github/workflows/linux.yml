@@ -409,12 +409,17 @@ jobs:
         run: python -c "import sysconfig; print(sysconfig.get_config_var('INCLUDEPY'))"
       - name: Confirm linking
         run: |
-          find apis/python -name '*.so'
-          find apis/python -name '*.so' | xargs ldd
-      - name: Remove extra libtiledbsoma.so
-        # Deleting this bundled libtiledbsoma.so to ensure the external
-        # shared object is being used in the tests
-        run: rm -f apis/python/src/tiledbsoma/libtiledbsoma.so
+          find apis/python -name '*.so*'
+          find apis/python -name '*.so*' | xargs ldd
+          readelf -d apis/python/src/tiledbsoma/pytiledbsoma.*.so  | grep R*PATH
+      - name: Fail if unnecessary libtiledbsoma.so is created
+        # https://github.com/single-cell-data/TileDB-SOMA/pull/1937
+        run: |
+          if [[ -f apis/python/src/tiledbsoma/libtiledbsoma.so ]]
+          then
+            echo "An unnecessary libtiledbsoma.so was created during the package build"
+            exit 1
+          fi
       - name: Test tiledbsoma-py
         run: |
           python -c "import tiledbsoma; print('successful import')"
