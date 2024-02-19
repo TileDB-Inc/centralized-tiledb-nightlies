@@ -62,7 +62,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Clone TileDB
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
           repository: TileDB-Inc/TileDB
           ref: ${{ github.event.inputs.LIBTILEDB_REF || 'dev' }}
@@ -93,7 +93,7 @@ jobs:
       # - name: Install TileDB
       #   run: cmake --build build-libtiledb --config Release --target install-tiledb
       - name: Upload libtiledb as artifact
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: nightly-libtiledb-linux
           path: |
@@ -110,18 +110,18 @@ jobs:
       PKG_CONFIG_PATH: ${{ github.workspace }}/install-libtiledb/lib/pkgconfig
     steps:
       - name: Clone TileDB-Py
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
           repository: TileDB-Inc/TileDB-Py
           ref: ${{ github.event.inputs.TILEDB_PY_REF || 'dev' }}
           fetch-depth: 0 # fetch everything for python setuptools_scm
       - name: Download nightly-libtiledb
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v4
         with:
           name: nightly-libtiledb-linux
           path: install-libtiledb
       - name: Set up Python
-        uses: actions/setup-python@v4
+        uses: actions/setup-python@v5
         with:
           python-version: "3.11"
       - name: Install dependencies
@@ -140,7 +140,7 @@ jobs:
       - name: Create a wheel
         run: python setup.py bdist_wheel --tiledb=$(pwd)/install-libtiledb/
       - name: Upload Python wheel as artifact
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: nightly-tiledb-py-linux
           path: dist/tiledb-*-linux_x86_64.whl
@@ -153,12 +153,12 @@ jobs:
       _R_CHECK_FORCE_SUGGESTS_: "FALSE"
     steps:
       - name: Clone TileDB-R
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
           repository: TileDB-Inc/TileDB-R
           ref: ${{ github.event.inputs.TILEDB_R_REF || 'master' }}
       - name: Download nightly-libtiledb
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v4
         with:
           name: nightly-libtiledb-linux
           path: install-libtiledb
@@ -172,7 +172,7 @@ jobs:
         run: |
           R CMD INSTALL --configure-args=--with-tiledb=$(pwd)/install-libtiledb --build tiledb_*.tar.gz
       - name: Upload R binary tarball as artifact
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: nightly-tiledb-r-linux
           path: tiledb_*_R_x86_64-pc-linux-gnu.tar.gz
@@ -187,12 +187,12 @@ jobs:
       LD_LIBRARY_PATH: ${{ github.workspace }}/install-libtiledb/lib
     steps:
       - name: Clone TileDB-VCF
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
           repository: TileDB-Inc/TileDB-VCF
           ref: ${{ github.event.inputs.LIBTILEDBVCF_REF || 'main' }}
       - name: Download nightly-libtiledb
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v4
         with:
           name: nightly-libtiledb-linux
           path: install-libtiledb
@@ -215,7 +215,7 @@ jobs:
           cmake --build build-libtiledbvcf --config Release --target install-libtiledbvcf
           ls -R install-libtiledbvcf/
       - name: Upload libtiledbvcf as artifact
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: nightly-libtiledbvcf-linux
           path: |
@@ -243,27 +243,27 @@ jobs:
       LD_LIBRARY_PATH: "${{ github.workspace }}/install-libtiledb/lib:${{ github.workspace }}/install-libtiledbvcf/lib"
     steps:
       - name: Clone TileDB-VCF
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
           repository: TileDB-Inc/TileDB-VCF
           ref: ${{ github.event.inputs.TILEDBVCF_PY_REF || 'main' }}
           fetch-depth: 0 # fetch everything for python setuptools_scm
       - name: Download nightly-libtiledb
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v4
         with:
           name: nightly-libtiledb-linux
           path: install-libtiledb
       - name: Download nightly-libtiledbvcf
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v4
         with:
           name: nightly-libtiledbvcf-linux
           path: install-libtiledbvcf
       - name: Download nightly-tiledb-py
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v4
         with:
           name: nightly-tiledb-py-linux
       - name: Set up Python
-        uses: actions/setup-python@v4
+        uses: actions/setup-python@v5
         with:
           python-version: "3.11"
       - name: Install dependencies
@@ -304,7 +304,7 @@ jobs:
           cd apis/python
           python setup.py bdist_wheel --libtiledbvcf=$(pwd)/install-libtiledbvcf/
       - name: Upload Python wheel as artifact
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: nightly-tiledbvcf-py-linux
           path: dist/tiledbvcf-*-linux_x86_64.whl
@@ -318,12 +318,12 @@ jobs:
       LD_LIBRARY_PATH: ${{ github.workspace }}/install-libtiledb/lib
     steps:
       - name: Clone TileDB-SOMA
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
           repository: single-cell-data/TileDB-SOMA
           ref: ${{ github.event.inputs.LIBTILEDBSOMA_REF || 'main' }}
       - name: Download nightly-libtiledb
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v4
         with:
           name: nightly-libtiledb-linux
           path: install-libtiledb
@@ -347,7 +347,7 @@ jobs:
           cmake --build build-libtiledbsoma --target install-libtiledbsoma
           ls -R $(pwd)/install-libtiledb/
       - name: Upload libtiledbsoma as artifact
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: nightly-libtiledbsoma-linux
           path: |
@@ -368,27 +368,27 @@ jobs:
       PKG_CONFIG_PATH: "${{ github.workspace }}/install-libtiledb/lib/pkgconfig:${{ github.workspace }}/install-libtiledbsoma/lib/pkgconfig"
     steps:
       - name: Clone TileDB-SOMA
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
           repository: single-cell-data/TileDB-SOMA
           ref: ${{ github.event.inputs.TILEDBSOMA_PY_REF || 'main' }}
           fetch-depth: 0 # fetch everything for python setuptools_scm
       - name: Download nightly-libtiledb
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v4
         with:
           name: nightly-libtiledb-linux
           path: install-libtiledb
       - name: Download nightly-libtiledbsoma
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v4
         with:
           name: nightly-libtiledbsoma-linux
           path: install-libtiledbsoma
       - name: Download nightly-tiledb-py
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v4
         with:
           name: nightly-tiledb-py-linux
       - name: Set up Python
-        uses: actions/setup-python@v4
+        uses: actions/setup-python@v5
         with:
           python-version: "3.11"
       - name: Install dependencies
@@ -436,7 +436,7 @@ jobs:
           cd apis/python
           python setup.py bdist_wheel
       - name: Upload Python wheel as artifact
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: nightly-tiledbsoma-py-linux
           path: dist/tiledbsoma-*-linux_x86_64.whl
@@ -450,22 +450,22 @@ jobs:
       PKG_CONFIG_PATH: "${{ github.workspace }}/install-libtiledb/lib/pkgconfig:${{ github.workspace }}/install-libtiledbsoma/lib/pkgconfig"
     steps:
       - name: Clone TileDB-SOMA
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
           repository: single-cell-data/TileDB-SOMA
           ref: ${{ github.event.inputs.TILEDBSOMA_R_REF || 'main' }}
       - name: Download nightly-libtiledb
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v4
         with:
           name: nightly-libtiledb-linux
           path: install-libtiledb
       - name: Download nightly-libtiledbsoma
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v4
         with:
           name: nightly-libtiledbsoma-linux
           path: install-libtiledbsoma
       - name: Download nightly-tiledb-r
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v4
         with:
           name: nightly-tiledb-r-linux
       - name: Bootstrap
@@ -482,7 +482,7 @@ jobs:
         run:
           cd apis/r && R CMD INSTALL --install-tests --build tiledbsoma_*.tar.gz
       - name: Upload R binary tarball as artifact
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: nightly-tiledbsoma-r-linux
           path: apis/r/tiledbsoma_*_R_x86_64-pc-linux-gnu.tar.gz
@@ -500,18 +500,18 @@ jobs:
       LD_LIBRARY_PATH: ${{ github.workspace }}/install-libtiledb/lib
     steps:
       - name: Clone MariaDB
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
           repository: MariaDB/server.git
           ref: mariadb-11.0.2
       - name: Clone TileDB-MariaDB into MariaDB
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
           repository: TileDB-Inc/TileDB-MariaDB
           ref: ${{ github.event.inputs.TILEDB_MARIADB_REF || 'master' }}
           path: storage/mytile
       - name: Download nightly-libtiledb
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v4
         with:
           name: nightly-libtiledb-linux
           path: install-libtiledb
@@ -553,12 +553,12 @@ jobs:
     needs: [libtiledb]
     steps:
       - name: Clone TileDB-Go
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
           repository: TileDB-Inc/TileDB-Go
           ref: ${{ github.event.inputs.TILEDB_GO_REF || 'master' }}
       - name: Download nightly-libtiledb
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v4
         with:
           name: nightly-libtiledb-linux
           path: install-libtiledb
@@ -588,7 +588,7 @@ jobs:
       GH_TOKEN: ${{ github.token }}
       TZ: "America/New_York"
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - name: Create release
         run: |
           the_date=$(date +%Y-%m-%d)
@@ -608,9 +608,9 @@ jobs:
       GH_TOKEN: ${{ github.token }}
       TZ: "America/New_York"
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - name: Download nightly-libtiledb
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v4
         with:
           name: nightly-libtiledb-linux
           path: install-libtiledb
@@ -628,9 +628,9 @@ jobs:
       GH_TOKEN: ${{ github.token }}
       TZ: "America/New_York"
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - name: Download nightly-libtiledbvcf
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v4
         with:
           name: nightly-libtiledbvcf-linux
           path: install-libtiledbvcf
@@ -648,9 +648,9 @@ jobs:
       GH_TOKEN: ${{ github.token }}
       TZ: "America/New_York"
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - name: Download nightly-libtiledbsoma
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v4
         with:
           name: nightly-libtiledbsoma-linux
           path: install-libtiledbsoma
