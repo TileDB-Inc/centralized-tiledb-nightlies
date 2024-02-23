@@ -475,7 +475,10 @@ jobs:
         run: |
           install.packages("remotes")
           library("remotes")
-          install_local(Sys.glob("tiledb_*_R_x86_64-pc-linux-gnu.tar.gz"), dependencies = TRUE, upgrade = "never")
+          binary_tarball <- Sys.glob("tiledb_*_R_x86_64-pc-linux-gnu.tar.gz")
+          message(binary_tarball)
+          install_deps(binary_tarball, dependencies = TRUE, upgrade = "never")
+          install.packages(binary_tarball, repos = NULL)
       - name: Dependencies
         run: cd apis/r && tools/r-ci.sh install_all
       - name: Build
