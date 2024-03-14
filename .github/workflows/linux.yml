@@ -307,7 +307,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: nightly-tiledbvcf-py-linux
-          path: dist/tiledbvcf-*-linux_x86_64.whl
+          path: apis/python/dist/tiledbvcf-*-linux_x86_64.whl
           retention-days: 14
           if-no-files-found: error
   libtiledbsoma:
