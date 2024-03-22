@@ -271,7 +271,8 @@ jobs:
           dask \
           distributed \
           'fsspec<2023.3.0' \
-          pyarrow==10.0.1 \
+          pyarrow==11 \
+          pyarrow-hotfix \
           pandas \
           pybind11 \
           pytest \
