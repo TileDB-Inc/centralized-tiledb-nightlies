@@ -400,7 +400,7 @@ jobs:
           pip list
       - name: Install tiledbsoma-py
         run: |
-          python -m pip -v install -e apis/python
+          python -m pip -v install --no-build-isolation -e apis/python
           pip list
       - name: Search for pybind11 headers
         run: |
