@@ -398,16 +398,21 @@ jobs:
         run: |
           pip install tiledb-*-linux_x86_64.whl
           pip list
-      - name: Install tiledbsoma-py
+      - name: Create a wheel
+        run: |
+          cd apis/python
+          python setup.py bdist_wheel
+      - name: Upload Python wheel as artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: nightly-tiledbsoma-py-linux
+          path: dist/tiledbsoma-*-linux_x86_64.whl
+          retention-days: 14
+          if-no-files-found: error
+      - name: Install tiledbsoma-py (editable mode to run tests)
         run: |
           python -m pip -v install -e apis/python
           pip list
-      - name: Search for pybind11 headers
-        run: |
-          find $pythonLocation -iname pybind11.h
-          find $pythonLocation -iname numpy.h
-      - name: Confirm INCLUDEPY
-        run: python -c "import sysconfig; print(sysconfig.get_config_var('INCLUDEPY'))"
       - name: Confirm linking
         run: |
           find apis/python -name '*.so*'
@@ -432,17 +437,6 @@ jobs:
           cd ..
           # Run test suite
           PYTHONPATH=$(pwd)/apis/python/src python -m pytest apis/python/tests
-      - name: Create a wheel
-        run: |
-          cd apis/python
-          python setup.py bdist_wheel
-      - name: Upload Python wheel as artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: nightly-tiledbsoma-py-linux
-          path: dist/tiledbsoma-*-linux_x86_64.whl
-          retention-days: 14
-          if-no-files-found: error
   tiledbsoma-r:
     runs-on: ubuntu-latest
     needs: [libtiledb, libtiledbsoma, tiledb-r]
