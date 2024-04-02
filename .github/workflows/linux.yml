@@ -623,7 +623,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: nightly-tiledb-cloud-py-linux
-          path: dist/tiledb-cloud-*-linux_x86_64.whl
+          path: dist/tiledb_cloud-*-none-any.whl
           retention-days: 14
           if-no-files-found: error
   build-all:
@@ -827,8 +827,8 @@ jobs:
       - name: Upload tiledb-cloud-py to release
         run: |
           the_date=$(date +%Y-%m-%d)
-          unzip -l tiledb-cloud-*-linux_x86_64.whl
-          gh release upload ${the_date} tiledb-cloud-*-linux_x86_64.whl --clobber
+          unzip -l tiledb_cloud-*-none-any.whl
+          gh release upload ${the_date} tiledb_cloud-*-none-any.whl --clobber
   issue:
     permissions:
       issues: write
