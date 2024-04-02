@@ -669,8 +669,6 @@ jobs:
             install-libtiledbvectorsearch/*
           retention-days: 14
           if-no-files-found: error
-      - name: Confirm linking
-        run: ldd install-libtiledbvectorsearch/lib/libtiledbvectorsearch.so
       - name: Test libtiledbvectorsearch
         run: cmake --build ./src/build --target check-ci
   tiledb-vector-search-py:
