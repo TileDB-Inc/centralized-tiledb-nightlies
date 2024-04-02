@@ -645,6 +645,7 @@ jobs:
       - name: Upload tiledb-py to release
         run: |
           the_date=$(date +%Y-%m-%d)
+          unzip -l tiledb-*-linux_x86_64.whl
           gh release upload ${the_date} tiledb-*-linux_x86_64.whl --clobber
   upload-tiledb-r:
     runs-on: ubuntu-latest
@@ -663,6 +664,7 @@ jobs:
       - name: Upload tiledb-r to release
         run: |
           the_date=$(date +%Y-%m-%d)
+          tar --list -f tiledb_*_R_x86_64-pc-linux-gnu.tar.gz
           gh release upload ${the_date} tiledb_*_R_x86_64-pc-linux-gnu.tar.gz --clobber
   upload-libtiledbvcf:
     runs-on: ubuntu-latest
@@ -701,6 +703,7 @@ jobs:
       - name: Upload tiledbvcf-py to release
         run: |
           the_date=$(date +%Y-%m-%d)
+          unzip -l tiledbvcf-*-linux_x86_64.whl
           gh release upload ${the_date} tiledbvcf-*-linux_x86_64.whl --clobber
   upload-libtiledbsoma:
     runs-on: ubuntu-latest
@@ -739,6 +742,7 @@ jobs:
       - name: Upload tiledbsoma-py to release
         run: |
           the_date=$(date +%Y-%m-%d)
+          unzip -l tiledbsoma-*-linux_x86_64.whl
           gh release upload ${the_date} tiledbsoma-*-linux_x86_64.whl --clobber
   upload-tiledbsoma-r:
     runs-on: ubuntu-latest
@@ -757,4 +761,5 @@ jobs:
       - name: Upload tiledbsoma-r to release
         run: |
           the_date=$(date +%Y-%m-%d)
+          tar --list -f tiledbsoma_*_R_x86_64-pc-linux-gnu.tar.gz
           gh release upload ${the_date} tiledbsoma_*_R_x86_64-pc-linux-gnu.tar.gz --clobber
