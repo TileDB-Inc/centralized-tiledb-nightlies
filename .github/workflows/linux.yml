@@ -409,12 +409,6 @@ jobs:
         run: |
           python -m pip -v install --no-build-isolation -e apis/python
           pip list
-      - name: Search for pybind11 headers
-        run: |
-          find $pythonLocation -iname pybind11.h
-          find $pythonLocation -iname numpy.h
-      - name: Confirm INCLUDEPY
-        run: python -c "import sysconfig; print(sysconfig.get_config_var('INCLUDEPY'))"
       - name: Confirm linking
         run: |
           find apis/python -name '*.so*'
