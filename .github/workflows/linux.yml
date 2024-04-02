@@ -57,6 +57,10 @@ on:
         description: >-
           The Git reference (tag, branch, commit) to checkout TileDB-Inc/TileDB-Go
         default: master
+      TILEDB_CLOUD_PY_REF:
+        description: >-
+          The Git reference (tag, branch, commit) to checkout TileDB-Inc/TileDB-Cloud-Py
+        default: main
 jobs:
   libtiledb:
     runs-on: ubuntu-latest
@@ -579,13 +583,71 @@ jobs:
           export LIBRARY_PATH=$(pwd)/install-libtiledb/lib
           export LD_LIBRARY_PATH=$(pwd)/install-libtiledb/lib
           go test -v ./...
+  tiledb-cloud-py:
+    runs-on: ubuntu-latest
+    needs: [libtiledb, tiledb-py]
+    env:
+      LD_LIBRARY_PATH: "${{ github.workspace }}/install-libtiledb/lib"
+    steps:
+      - name: Clone TileDB-Cloud-Py
+        uses: actions/checkout@v4
+        with:
+          repository: TileDB-Inc/TileDB-Cloud-Py
+          ref: ${{ github.event.inputs.TILEDB_CLOUD_PY_REF || 'main' }}
+          fetch-depth: 0 # fetch everything for python setuptools_scm
+      - name: Download nightly-libtiledb
+        uses: actions/download-artifact@v4
+        with:
+          name: nightly-libtiledb-linux
+          path: install-libtiledb
+      - name: Download nightly-tiledb-py
+        uses: actions/download-artifact@v4
+        with:
+          name: nightly-tiledb-py-linux
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Install dependencies
+        run: python -m pip install \
+               "attrs>=21.4.0" \
+               "certifi" \
+               "cloudpickle>=1.4.1,<3" \
+               "importlib-metadata" \
+               "packaging" \
+               "pandas>=1.2.4" \
+               "pyarrow>=3.0.0" \
+               "python-dateutil" \
+               "six>=1.10" \
+               "tblib~=1.7" \
+               "tiledb>=0.15.2" \
+               "typing-extensions" \
+               "urllib3>=1.26" \
+               "wheel"
+      - name: Install nightly tiledb-py
+        run: |
+          pip install tiledb-*-linux_x86_64.whl
+          pip list
+      - name: Build tiledb-cloud
+        run: |
+          echo $LD_LIBRARY_PATH
+          pip install --no-build-isolation .
+      - name: Create a wheel
+        run: python setup.py bdist_wheel
+      - name: Upload Python wheel as artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: nightly-tiledb-cloud-py-linux
+          path: dist/tiledb-cloud-*-linux_x86_64.whl
+          retention-days: 14
+          if-no-files-found: error
   build-all:
     # this is simply a target to build everything locally with `act` without
     # creating a new release
     name: Build everything
     runs-on: ubuntu-latest
     needs: [libtiledb, tiledb-py, tiledb-r, libtiledbvcf, tiledbvcf-py, libtiledbsoma,
-            tiledbsoma-py, tiledbsoma-r, tiledb-mariadb, tiledb-go]
+            tiledbsoma-py, tiledbsoma-r, tiledb-mariadb, tiledb-go, tiledb-cloud-py]
     steps:
       - run: echo "Success! Everything was built"
   create-release:
@@ -763,6 +825,25 @@ jobs:
           the_date=$(date +%Y-%m-%d)
           tar --list -f tiledbsoma_*_R_x86_64-pc-linux-gnu.tar.gz
           gh release upload ${the_date} tiledbsoma_*_R_x86_64-pc-linux-gnu.tar.gz --clobber
+  upload-tiledb-cloud-py:
+    runs-on: ubuntu-latest
+    needs: [create-release, tiledb-cloud-py]
+    permissions:
+      contents: write
+    env:
+      GH_TOKEN: ${{ github.token }}
+      TZ: "America/New_York"
+    steps:
+      - uses: actions/checkout@v4
+      - name: Download nightly-tiledb-cloud-py
+        uses: actions/download-artifact@v4
+        with:
+          name: nightly-tiledb-cloud-py-linux
+      - name: Upload tiledb-cloud-py to release
+        run: |
+          the_date=$(date +%Y-%m-%d)
+          unzip -l tiledb-cloud-*-linux_x86_64.whl
+          gh release upload ${the_date} tiledb-cloud-*-linux_x86_64.whl --clobber
   issue:
     permissions:
       issues: write
