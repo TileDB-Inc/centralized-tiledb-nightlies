@@ -646,6 +646,24 @@ jobs:
         run: |
           the_date=$(date +%Y-%m-%d)
           gh release upload ${the_date} tiledb-*-linux_x86_64.whl --clobber
+  upload-tiledb-r:
+    runs-on: ubuntu-latest
+    needs: [create-release, tiledb-r]
+    permissions:
+      contents: write
+    env:
+      GH_TOKEN: ${{ github.token }}
+      TZ: "America/New_York"
+    steps:
+      - uses: actions/checkout@v4
+      - name: Download nightly-tiledb-r
+        uses: actions/download-artifact@v4
+        with:
+          name: nightly-tiledb-r-linux
+      - name: Upload tiledb-r to release
+        run: |
+          the_date=$(date +%Y-%m-%d)
+          gh release upload ${the_date} tiledb_*_R_x86_64-pc-linux-gnu.tar.gz --clobber
   upload-libtiledbvcf:
     runs-on: ubuntu-latest
     needs: [create-release, libtiledbvcf]
@@ -722,3 +740,21 @@ jobs:
         run: |
           the_date=$(date +%Y-%m-%d)
           gh release upload ${the_date} tiledbsoma-*-linux_x86_64.whl --clobber
+  upload-tiledbsoma-r:
+    runs-on: ubuntu-latest
+    needs: [create-release, tiledbsoma-r]
+    permissions:
+      contents: write
+    env:
+      GH_TOKEN: ${{ github.token }}
+      TZ: "America/New_York"
+    steps:
+      - uses: actions/checkout@v4
+      - name: Download nightly-tiledbsoma-r
+        uses: actions/download-artifact@v4
+        with:
+          name: nightly-tiledbsoma-r-linux
+      - name: Upload tiledbsoma-r to release
+        run: |
+          the_date=$(date +%Y-%m-%d)
+          gh release upload ${the_date} tiledbsoma_*_R_x86_64-pc-linux-gnu.tar.gz --clobber
