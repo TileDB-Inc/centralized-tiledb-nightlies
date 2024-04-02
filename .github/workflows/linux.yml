@@ -763,3 +763,19 @@ jobs:
           the_date=$(date +%Y-%m-%d)
           tar --list -f tiledbsoma_*_R_x86_64-pc-linux-gnu.tar.gz
           gh release upload ${the_date} tiledbsoma_*_R_x86_64-pc-linux-gnu.tar.gz --clobber
+  issue:
+    permissions:
+      issues: write
+    runs-on: ubuntu-latest
+    needs: [build-all]
+    if: ( failure() || cancelled() ) && github.repository_owner == 'jdblischak' && github.event_name == 'schedule'
+    steps:
+      - uses: actions/checkout@v4
+      - name: Open Issue
+        uses: TileDB-Inc/github-actions/open-issue@main
+        with:
+          name: centralized nightlies
+          label: nightly-failure
+          assignee: jdblischak
+        env:
+          TZ: "America/New_York"
