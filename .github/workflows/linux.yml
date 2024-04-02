@@ -604,7 +604,7 @@ jobs:
           if ! gh release list | cut -f3 | grep -q $the_date
           then
             echo "Creating new release: $the_date"
-            gh release create $the_date
+            gh release create $the_date --notes "Nightly binaries created on $the_date"
           else
             echo "Release already exists: $the_date"
           fi
