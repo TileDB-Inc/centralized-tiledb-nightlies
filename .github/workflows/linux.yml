@@ -42,9 +42,9 @@ on:
         description: >-
           The Git reference (tag, branch, commit) to checkout TileDB-Inc/TileDB-Go
         default: master
-      TILEDB_CLOUD_PY_REF:
+      TILEDB_VECTOR_SEARCH_REF:
         description: >-
-          The Git reference (tag, branch, commit) to checkout TileDB-Inc/TileDB-Cloud-Py
+          The Git reference (tag, branch, commit) to checkout TileDB-Inc/TileDB-Vector-Search
         default: main
 jobs:
   libtiledb:
@@ -626,13 +626,116 @@ jobs:
           path: dist/tiledb_cloud-*-none-any.whl
           retention-days: 14
           if-no-files-found: error
+  libtiledbvectorsearch:
+    runs-on: ubuntu-latest
+    needs: libtiledb
+    env:
+      LD_LIBRARY_PATH: ${{ github.workspace }}/install-libtiledb/lib
+    steps:
+      - name: Clone TileDB-Vector-Search
+        uses: actions/checkout@v4
+        with:
+          repository: TileDB-Inc/TileDB-Vector-Search
+          ref: ${{ github.event.inputs.TILEDB_VECTOR_SEARCH_REF || 'main' }}
+      - name: Download nightly-libtiledb
+        uses: actions/download-artifact@v4
+        with:
+          name: nightly-libtiledb-linux
+          path: install-libtiledb
+      - name: Setup
+        run: |
+          sudo apt-get update
+          sudo apt-get install --yes cmake libopenblas-dev
+      - name: Configure libtiledbvectorsearch
+        run: |
+          cmake -S ./src -B ./src/build \
+            -D CMAKE_BUILD_TYPE=Release \
+            -D CMAKE_PREFIX_PATH=$(pwd)/install-libtiledb/ \
+            -D CMAKE_INSTALL_PREFIX:PATH=$(pwd)/install-libtiledbvectorsearch/ \
+            -D DOWNLOAD_TILEDB_PREBUILT=OFF \
+            -D TILEDB_VS_ENABLE_BLAS=ON \
+            -D OVERRIDE_INSTALL_PREFIX=OFF
+      - name: Build libtiledbvectorsearch
+        run: cmake --build ./src/build -j $(nproc) --config Release
+      - name: Install libtiledbvectorsearch
+        run: |
+          cmake --build ./src/build --config Release --target install-libtiledbvectorsearch
+          ls -R install-libtiledbvectorsearch/
+      - name: Upload libtiledbvectorsearch as artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: nightly-libtiledbvectorsearch-linux
+          path: |
+            install-libtiledbvectorsearch/*
+          retention-days: 14
+          if-no-files-found: error
+      - name: Confirm linking
+        run: ldd install-libtiledbvectorsearch/lib/libtiledbvectorsearch.so
+      - name: Test libtiledbvectorsearch
+        run: cmake --build ./src/build --target check-ci
+  tiledb-vector-search-py:
+    runs-on: ubuntu-latest
+    needs: [libtiledb, tiledb-py, libtiledbvectorsearch]
+    env:
+      LD_LIBRARY_PATH: "${{ github.workspace }}/install-libtiledb/lib"
+    steps:
+      - name: Clone TileDB-Vector-Search
+        uses: actions/checkout@v4
+        with:
+          repository: TileDB-Inc/TileDB-Vector-Search
+          ref: ${{ github.event.inputs.TILEDB_VECTOR_SEARCH_REF || 'main' }}
+          fetch-depth: 0 # fetch everything for python setuptools_scm
+      - name: Download nightly-libtiledb
+        uses: actions/download-artifact@v4
+        with:
+          name: nightly-libtiledb-linux
+          path: install-libtiledb
+      - name: Download nightly-tiledb-py
+        uses: actions/download-artifact@v4
+        with:
+          name: nightly-tiledb-py-linux
+      - name: Download nightly-tiledb-cloud-py
+        uses: actions/download-artifact@v4
+        with:
+          name: nightly-tiledb-cloud-py-linux
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Install nightly tiledb-py
+        run: |
+          pip install tiledb-*-linux_x86_64.whl
+          pip list
+      - name: Install nightly tiledb-cloud-py
+        run: |
+          pip install tiledb_cloud-*-none-any.whl
+          pip list
+      - name: Build tiledb-vector-search-py
+        run: |
+          echo $LD_LIBRARY_PATH
+          pip install --no-build-isolation .[test]
+      - name: Create a wheel
+        run: python -m pip wheel --wheel-dir=dist/ --no-deps -vvv .
+      - name: Upload Python wheel as artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: nightly-tiledb-cloud-py-linux
+          path: dist/tiledb_vector_search-*-linux_x86_64.whl
+          retention-days: 14
+          if-no-files-found: error
+      - name: Test tiledb-vector-search-py
+        run: |
+          python -c "from tiledb.vector_search.version import version; print(version)"
+          pip install -r test/ipynb/requirements.txt
+          pytest --nbmake test/ipynb
   build-all:
     # this is simply a target to build everything locally with `act` without
     # creating a new release
     name: Build everything
     runs-on: ubuntu-latest
     needs: [libtiledb, tiledb-py, tiledb-r, libtiledbvcf, tiledbvcf-py, libtiledbsoma,
-            tiledbsoma-py, tiledbsoma-r, tiledb-mariadb, tiledb-go, tiledb-cloud-py]
+            tiledbsoma-py, tiledbsoma-r, tiledb-mariadb, tiledb-go, tiledb-cloud-py,
+            libtiledbvectorsearch, tiledb-vector-search-py]
     steps:
       - run: echo "Success! Everything was built"
   create-release:
@@ -829,6 +932,45 @@ jobs:
           the_date=$(date +%Y-%m-%d)
           unzip -l tiledb_cloud-*-none-any.whl
           gh release upload ${the_date} tiledb_cloud-*-none-any.whl --clobber
+  upload-libtiledbvectorsearch:
+    runs-on: ubuntu-latest
+    needs: [create-release, libtiledbvectorsearch]
+    permissions:
+      contents: write
+    env:
+      GH_TOKEN: ${{ github.token }}
+      TZ: "America/New_York"
+    steps:
+      - uses: actions/checkout@v4
+      - name: Download nightly-libtiledbvectorsearch
+        uses: actions/download-artifact@v4
+        with:
+          name: nightly-libtiledbvectorsearch-linux
+          path: install-libtiledbvectorsearch
+      - name: Upload libtiledbvectorsearch to release
+        run: |
+          the_date=$(date +%Y-%m-%d)
+          tar -C install-libtiledbvectorsearch -cvzf libtiledbvectorsearch-${the_date}.tar.gz ./
+          gh release upload ${the_date} libtiledbvectorsearch-${the_date}.tar.gz --clobber
+  upload-tiledb-vector-search-py:
+    runs-on: ubuntu-latest
+    needs: [create-release, tiledb-vector-search-py]
+    permissions:
+      contents: write
+    env:
+      GH_TOKEN: ${{ github.token }}
+      TZ: "America/New_York"
+    steps:
+      - uses: actions/checkout@v4
+      - name: Download nightly-tiledb-vector-search-py
+        uses: actions/download-artifact@v4
+        with:
+          name: nightly-tiledb-vector-search-py-linux
+      - name: Upload tiledb-vector-search-py to release
+        run: |
+          the_date=$(date +%Y-%m-%d)
+          unzip -l tiledb_vector_search-*-linux_x86_64.whl
+          gh release upload ${the_date} tiledb_vector_search-*-linux_x86_64.whl --clobber
   issue:
     permissions:
       issues: write
