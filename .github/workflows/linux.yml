@@ -24,30 +24,15 @@ on:
         description: >-
           The Git reference (tag, branch, commit) to checkout TileDB-Inc/TileDB-R
         default: master
-      LIBTILEDBVCF_REF:
+      TILEDB_VCF_REF:
         description: >-
           The Git reference (tag, branch, commit) to checkout
-          TileDB-Inc/TileDB-VCF (for building libtiledbvcf)
+          TileDB-Inc/TileDB-VCF
         default: main
-      TILEDBVCF_PY_REF:
+      TILEDB_SOMA_REF:
         description: >-
           The Git reference (tag, branch, commit) to checkout
-          TileDB-Inc/TileDB-VCF (for building tiledbvcf-py)
-        default: main
-      LIBTILEDBSOMA_REF:
-        description: >-
-          The Git reference (tag, branch, commit) to checkout
-          single-cell-data/TileDB-SOMA (for building libtiledbsoma)
-        default: main
-      TILEDBSOMA_PY_REF:
-        description: >-
-          The Git reference (tag, branch, commit) to checkout
-          single-cell-data/TileDB-SOMA (for builing tiledbsoma-py)
-        default: main
-      TILEDBSOMA_R_REF:
-        description: >-
-          The Git reference (tag, branch, commit) to checkout
-          single-cell-data/TileDB-SOMA (for building tiledbsoma-r)
+          single-cell-data/TileDB-SOMA
         default: main
       TILEDB_MARIADB_REF:
         description: >-
@@ -194,7 +179,7 @@ jobs:
         uses: actions/checkout@v4
         with:
           repository: TileDB-Inc/TileDB-VCF
-          ref: ${{ github.event.inputs.LIBTILEDBVCF_REF || 'main' }}
+          ref: ${{ github.event.inputs.TILEDB_VCF_REF || 'main' }}
       - name: Download nightly-libtiledb
         uses: actions/download-artifact@v4
         with:
@@ -250,7 +235,7 @@ jobs:
         uses: actions/checkout@v4
         with:
           repository: TileDB-Inc/TileDB-VCF
-          ref: ${{ github.event.inputs.TILEDBVCF_PY_REF || 'main' }}
+          ref: ${{ github.event.inputs.TILEDB_VCF_REF || 'main' }}
           fetch-depth: 0 # fetch everything for python setuptools_scm
       - name: Download nightly-libtiledb
         uses: actions/download-artifact@v4
@@ -326,7 +311,7 @@ jobs:
         uses: actions/checkout@v4
         with:
           repository: single-cell-data/TileDB-SOMA
-          ref: ${{ github.event.inputs.LIBTILEDBSOMA_REF || 'main' }}
+          ref: ${{ github.event.inputs.TILEDB_SOMA_REF || 'main' }}
       - name: Download nightly-libtiledb
         uses: actions/download-artifact@v4
         with:
@@ -376,7 +361,7 @@ jobs:
         uses: actions/checkout@v4
         with:
           repository: single-cell-data/TileDB-SOMA
-          ref: ${{ github.event.inputs.TILEDBSOMA_PY_REF || 'main' }}
+          ref: ${{ github.event.inputs.TILEDB_SOMA_REF || 'main' }}
           fetch-depth: 0 # fetch everything for python setuptools_scm
       - name: Download nightly-libtiledb
         uses: actions/download-artifact@v4
@@ -459,7 +444,7 @@ jobs:
         uses: actions/checkout@v4
         with:
           repository: single-cell-data/TileDB-SOMA
-          ref: ${{ github.event.inputs.TILEDBSOMA_R_REF || 'main' }}
+          ref: ${{ github.event.inputs.TILEDB_SOMA_REF || 'main' }}
       - name: Download nightly-libtiledb
         uses: actions/download-artifact@v4
         with:
