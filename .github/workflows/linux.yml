@@ -628,6 +628,24 @@ jobs:
           the_date=$(date +%Y-%m-%d)
           tar -C install-libtiledb -cvzf libtiledb-${the_date}.tar.gz ./
           gh release upload ${the_date} libtiledb-${the_date}.tar.gz --clobber
+  upload-tiledb-py:
+    runs-on: ubuntu-latest
+    needs: [create-release, tiledb-py]
+    permissions:
+      contents: write
+    env:
+      GH_TOKEN: ${{ github.token }}
+      TZ: "America/New_York"
+    steps:
+      - uses: actions/checkout@v4
+      - name: Download nightly-tiledb-py
+        uses: actions/download-artifact@v4
+        with:
+          name: nightly-tiledb-py-linux
+      - name: Upload tiledb-py to release
+        run: |
+          the_date=$(date +%Y-%m-%d)
+          gh release upload ${the_date} tiledb-*-linux_x86_64.whl --clobber
   upload-libtiledbvcf:
     runs-on: ubuntu-latest
     needs: [create-release, libtiledbvcf]
@@ -648,6 +666,24 @@ jobs:
           the_date=$(date +%Y-%m-%d)
           tar -C install-libtiledbvcf -cvzf libtiledbvcf-${the_date}.tar.gz ./
           gh release upload ${the_date} libtiledbvcf-${the_date}.tar.gz --clobber
+  upload-tiledbvcf-py:
+    runs-on: ubuntu-latest
+    needs: [create-release, tiledbvcf-py]
+    permissions:
+      contents: write
+    env:
+      GH_TOKEN: ${{ github.token }}
+      TZ: "America/New_York"
+    steps:
+      - uses: actions/checkout@v4
+      - name: Download nightly-tiledbvcf-py
+        uses: actions/download-artifact@v4
+        with:
+          name: nightly-tiledbvcf-py-linux
+      - name: Upload tiledbvcf-py to release
+        run: |
+          the_date=$(date +%Y-%m-%d)
+          gh release upload ${the_date} tiledbvcf-*-linux_x86_64.whl --clobber
   upload-libtiledbsoma:
     runs-on: ubuntu-latest
     needs: [create-release, libtiledbsoma]
@@ -668,3 +704,21 @@ jobs:
           the_date=$(date +%Y-%m-%d)
           tar -C install-libtiledbsoma -cvzf libtiledbsoma-${the_date}.tar.gz ./
           gh release upload ${the_date} libtiledbsoma-${the_date}.tar.gz --clobber
+  upload-tiledbsoma-py:
+    runs-on: ubuntu-latest
+    needs: [create-release, tiledbsoma-py]
+    permissions:
+      contents: write
+    env:
+      GH_TOKEN: ${{ github.token }}
+      TZ: "America/New_York"
+    steps:
+      - uses: actions/checkout@v4
+      - name: Download nightly-tiledbsoma-py
+        uses: actions/download-artifact@v4
+        with:
+          name: nightly-tiledbsoma-py-linux
+      - name: Upload tiledbsoma-py to release
+        run: |
+          the_date=$(date +%Y-%m-%d)
+          gh release upload ${the_date} tiledbsoma-*-linux_x86_64.whl --clobber
