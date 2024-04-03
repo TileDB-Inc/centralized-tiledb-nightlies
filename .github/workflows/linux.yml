@@ -710,6 +710,7 @@ jobs:
             nbmake \
             pybind11 \
             "pytest<8.0.0" \
+            setuptools-scm \
             scikit-build-core[pyproject] \
             scikit-learn \
             typing-extensions
