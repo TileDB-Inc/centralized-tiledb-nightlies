@@ -738,6 +738,7 @@ jobs:
       - name: Test tiledb-vector-search-py
         run: |
           python -c "from tiledb.vector_search.version import version; print(version)"
+          cd apis/python
           pip install -r test/ipynb/requirements.txt
           pytest --nbmake test/ipynb
   build-all:
