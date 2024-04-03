@@ -710,7 +710,7 @@ jobs:
             nbmake \
             pybind11 \
             "pytest<8.0.0" \
-            scikit-build-core \
+            scikit-build-core[pyproject] \
             scikit-learn \
             typing-extensions
       - name: Install nightly tiledb-py
