@@ -731,7 +731,7 @@ jobs:
       - name: Upload Python wheel as artifact
         uses: actions/upload-artifact@v4
         with:
-          name: nightly-tiledb-cloud-py-linux
+          name: nightly-tiledb-vector-search-py-linux
           path: dist/tiledb_vector_search-*_x86_64.whl
           retention-days: 14
           if-no-files-found: error
