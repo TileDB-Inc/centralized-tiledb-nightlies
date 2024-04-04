@@ -112,7 +112,7 @@ jobs:
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
-          python-version: "3.11"
+          python-version: "3.9"
       - name: Install dependencies
         run: python -m pip install --upgrade -r misc/requirements_ci.txt
       - name: Build TileDB-Py
@@ -254,7 +254,7 @@ jobs:
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
-          python-version: "3.11"
+          python-version: "3.9"
       - name: Install dependencies
         run: python -m pip install \
           dask \
@@ -380,7 +380,7 @@ jobs:
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
-          python-version: "3.11"
+          python-version: "3.9"
       # https://github.com/single-cell-data/TileDB-SOMA/blob/main/apis/python/pyproject.toml
       - name: Install dependencies
         run: |
@@ -592,7 +592,7 @@ jobs:
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
-          python-version: "3.11"
+          python-version: "3.9"
       - name: Install dependencies
         run: python -m pip install \
                "attrs>=21.4.0" \
@@ -699,7 +699,7 @@ jobs:
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
-          python-version: "3.11"
+          python-version: "3.9"
       - name: Install system dependencies
         run: |
           sudo apt-get update
