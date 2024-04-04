@@ -736,12 +736,14 @@ jobs:
           retention-days: 14
           if-no-files-found: error
       - name: Test tiledb-vector-search-py
+        env:
+          TILEDB_REST_TOKEN: ${{ secrets.TILEDB_REST_TOKEN }}
         run: |
           python -c "from tiledb.vector_search.version import version; print(version)"
           cd apis/python
           pytest
-          # pip install -r test/ipynb/requirements.txt
-          # pytest --nbmake test/ipynb
+          pip install -r test/ipynb/requirements.txt
+          pytest --nbmake test/ipynb
   build-all:
     # this is simply a target to build everything locally with `act` without
     # creating a new release
