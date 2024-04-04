@@ -616,9 +616,9 @@ jobs:
       - name: Build tiledb-cloud
         run: |
           echo $LD_LIBRARY_PATH
-          pip install --no-build-isolation .
+          pip install --no-build-isolation .[tests]
       - name: Create a wheel
-        run: python setup.py bdist_wheel
+        run: python -m pip wheel --wheel-dir=dist/ --no-deps -vvv .
       - name: Upload Python wheel as artifact
         uses: actions/upload-artifact@v4
         with:
