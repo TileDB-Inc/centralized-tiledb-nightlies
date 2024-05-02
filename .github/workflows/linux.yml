@@ -79,6 +79,7 @@ jobs:
             -D TILEDB_WERROR=ON \
             -D TILEDB_SERIALIZATION=ON \
             -D CMAKE_BUILD_TYPE=Release \
+            -D TILEDB_S3=ON \
             -D VCPKG_TARGET_TRIPLET=x64-linux-release
       - name: Build TileDB
         if: github.ref_name == 'main'
