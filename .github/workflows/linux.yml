@@ -56,7 +56,7 @@ jobs:
           repository: TileDB-Inc/TileDB
           ref: ${{ github.event.inputs.LIBTILEDB_REF || 'dev' }}
       - name: Download release tarball
-        run: wget https://github.com/TileDB-Inc/TileDB/releases/download/2.21.1/tiledb-linux-x86_64-2.21.1-acd5c50.tar.gz
+        run: wget https://github.com/TileDB-Inc/TileDB/releases/download/2.22.0/tiledb-linux-x86_64-2.22.0-52e981e.tar.gz
       - name: Unpack release tarball
         run: |
           mkdir install-libtiledb
