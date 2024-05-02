@@ -635,6 +635,7 @@ jobs:
       - run: echo "Success! Everything was built"
   create-release:
     name: Create a new release
+    if: github.ref_name == 'main' && github.repository_owner == 'jdblischak' && github.event_name != 'pull_request'
     runs-on: ubuntu-latest
     permissions:
       contents: write
