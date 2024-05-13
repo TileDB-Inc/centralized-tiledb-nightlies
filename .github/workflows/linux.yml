@@ -96,7 +96,9 @@ jobs:
           if-no-files-found: error
       - name: Test TileDB
         if: github.ref_name == 'main'
-        run: cmake --build build-libtiledb --target check --config Release
+        run: |
+          make -C build-libtiledb/tiledb tests -j $(nproc)
+          ./build-libtiledb/tiledb/test/tiledb_unit --vfs native
   tiledb-py:
     runs-on: ubuntu-latest
     needs: libtiledb
