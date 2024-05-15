@@ -276,6 +276,7 @@ jobs:
       - name: Build tiledbvcf-py
         run: |
           export LIBTILEDBVCF_PATH=$(pwd)/install-libtiledbvcf/lib/
+          export TileDB_DIR=$(pwd)/install-libtiledb/lib/cmake/TileDB
           python -m pip install -v apis/python[test]
       - name: Confirm linking
         run: |
