@@ -41,7 +41,9 @@ on:
       TILEDB_GO_REF:
         description: >-
           The Git reference (tag, branch, commit) to checkout TileDB-Inc/TileDB-Go
-        default: master
+        # Revert to master branch once fix has been merged
+        # https://github.com/TileDB-Inc/TileDB-Go/pull/313
+        default: smr/sc-47198/update-array-deserialize-params
       TILEDB_CLOUD_PY_REF:
         description: >-
           The Git reference (tag, branch, commit) to checkout TileDB-Inc/TileDB-Cloud-Py
