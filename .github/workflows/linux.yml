@@ -41,9 +41,7 @@ on:
       TILEDB_GO_REF:
         description: >-
           The Git reference (tag, branch, commit) to checkout TileDB-Inc/TileDB-Go
-        # Revert to master branch once fix has been merged
-        # https://github.com/TileDB-Inc/TileDB-Go/pull/313
-        default: smr/sc-47198/update-array-deserialize-params
+        default: master
       TILEDB_CLOUD_PY_REF:
         description: >-
           The Git reference (tag, branch, commit) to checkout TileDB-Inc/TileDB-Cloud-Py
@@ -566,9 +564,7 @@ jobs:
         uses: actions/checkout@v4
         with:
           repository: TileDB-Inc/TileDB-Go
-          # Revert to master branch once fix has been merged
-          # https://github.com/TileDB-Inc/TileDB-Go/pull/313
-          ref: ${{ github.event.inputs.TILEDB_GO_REF || 'smr/sc-47198/update-array-deserialize-params' }}
+          ref: ${{ github.event.inputs.TILEDB_GO_REF || 'master' }}
       - name: Download nightly-libtiledb
         uses: actions/download-artifact@v4
         with:
