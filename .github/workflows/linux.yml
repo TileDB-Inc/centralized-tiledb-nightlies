@@ -137,6 +137,8 @@ jobs:
           python -c "import tiledb; print(tiledb.version())"
       - name: Test TileDB-Py
         run: pytest -vv
+      - name: Cleanup previous build before building a wheel
+        run: python setup.py clean --all
       - name: Create a wheel
         run: python setup.py bdist_wheel --tiledb=$(pwd)/install-libtiledb/
       - name: Upload Python wheel as artifact
