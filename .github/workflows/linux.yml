@@ -113,7 +113,8 @@ jobs:
         uses: actions/checkout@v4
         with:
           repository: TileDB-Inc/TileDB-Py
-          ref: ${{ github.event.inputs.TILEDB_PY_REF || 'dev' }}
+          # ref: ${{ github.event.inputs.TILEDB_PY_REF || 'dev' }}
+          ref: ${{ github.event.inputs.TILEDB_PY_REF || 'db/scikit-build-core' }}
           fetch-depth: 0 # fetch everything for python setuptools_scm
       - name: Download nightly-libtiledb
         uses: actions/download-artifact@v4
@@ -124,12 +125,11 @@ jobs:
         uses: actions/setup-python@v5
         with:
           python-version: "3.11"
-      - name: Install dependencies
-        run: python -m pip install --upgrade -r misc/requirements_ci.txt
       - name: Build TileDB-Py
         run: |
           echo $LD_LIBRARY_PATH
-          python setup.py develop --tiledb=$(pwd)/install-libtiledb/
+          export TILEDB_PATH=$(pwd)/install-libtiledb/
+          python -m pip install -v .
       - name: Import TileDB-Py
         run: |
           python -c "import tiledb; print('successful import')"
@@ -138,7 +138,9 @@ jobs:
       - name: Test TileDB-Py
         run: pytest -vv
       - name: Create a wheel
-        run: python setup.py bdist_wheel --tiledb=$(pwd)/install-libtiledb/
+        run: |
+          export TILEDB_PATH=$(pwd)/install-libtiledb/
+          python -m pip wheel -v --wheel-dir=dist .
       - name: Upload Python wheel as artifact
         uses: actions/upload-artifact@v4
         with:
