@@ -129,7 +129,7 @@ jobs:
         run: |
           echo $LD_LIBRARY_PATH
           export TILEDB_PATH=$(pwd)/install-libtiledb/
-          python -m pip install -v .
+          python -m pip install -v .[test]
       - name: Import TileDB-Py
         run: |
           # Can't run the import inside of the Git repo because Python
