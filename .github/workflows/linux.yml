@@ -129,7 +129,7 @@ jobs:
         run: |
           echo $LD_LIBRARY_PATH
           export TILEDB_PATH=$(pwd)/install-libtiledb/
-          python -m pip install --editable -v .[test]
+          python -m pip install -v --editable .[test]
       - name: Import TileDB-Py
         run: |
           python -c "import tiledb; print('successful import')"
