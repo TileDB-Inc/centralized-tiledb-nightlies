@@ -129,12 +129,9 @@ jobs:
         run: |
           echo $LD_LIBRARY_PATH
           export TILEDB_PATH=$(pwd)/install-libtiledb/
-          python -m pip install -v .[test]
+          python -m pip install --editable -v .[test]
       - name: Import TileDB-Py
         run: |
-          # Can't run the import inside of the Git repo because Python
-          # automatically looks for `./module/__init.py__`
-          cd /tmp
           python -c "import tiledb; print('successful import')"
           python -c "import tiledb; print(tiledb.libtiledb.version())"
           python -c "import tiledb; print(tiledb.version())"
