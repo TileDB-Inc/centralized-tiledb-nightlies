@@ -57,7 +57,7 @@ jobs:
           ref: ${{ github.event.inputs.LIBTILEDB_REF || 'dev' }}
       - name: Download release tarball
         if: github.ref_name != 'main'
-        run: wget https://github.com/TileDB-Inc/TileDB/releases/download/2.25.0/tiledb-linux-x86_64-2.25.0-bbcbd3f.tar.gz
+        run: wget https://github.com/TileDB-Inc/TileDB/releases/download/2.26.0-rc0/tiledb-linux-x86_64-2.26.0-rc0-4487393.tar.gz
       - name: Unpack release tarball
         if: github.ref_name != 'main'
         run: |
