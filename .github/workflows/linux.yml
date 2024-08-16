@@ -539,8 +539,7 @@ jobs:
             -D PLUGIN_FEDERATED=NO \
             -D PLUGIN_FEDERATEDX=NO \
             -D PLUGIN_CONNECT=NO \
-            -D CMAKE_BUILD_TYPE=Debug \
-            -D WITH_DEBUG=1 \
+            -D CMAKE_BUILD_TYPE=Release \
             -D CMAKE_INCLUDE_PATH="/usr/local/include" \
             -D TILEDB_FORCE_ALL_DEPS=${TILEDB_FORCE_ALL_DEPS-OFF}
       - name: Build TileDB-MariaDB
@@ -551,12 +550,14 @@ jobs:
         run: |
           du -sh builddir
           du -sh builddir/storage/mytile
+          ldd builddir/storage/mytile/ha_mytile.so
+          # Fail if not properly linked to nightly libtiledb.so
           ldd builddir/storage/mytile/ha_mytile.so | \
             grep -q $(pwd)/install-libtiledb/lib/libtiledb.so
       - name: Test TileDB-MariaDB
         run: |
           cd builddir
-          ./mysql-test/mysql-test-run.pl --suite=mytile --debug
+          ./mysql-test/mysql-test-run.pl --suite=mytile
   tiledb-go:
     runs-on: ubuntu-latest
     needs: [libtiledb]
