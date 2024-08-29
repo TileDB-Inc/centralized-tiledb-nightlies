@@ -55,9 +55,10 @@ jobs:
         with:
           repository: TileDB-Inc/TileDB
           ref: ${{ github.event.inputs.LIBTILEDB_REF || 'dev' }}
+      # Use recent release tarball on branches for quicker feedback
       - name: Download release tarball
         if: github.ref_name != 'main'
-        run: wget https://github.com/TileDB-Inc/TileDB/releases/download/2.26.0-rc0/tiledb-linux-x86_64-2.26.0-rc0-4487393.tar.gz
+        run: wget https://github.com/TileDB-Inc/TileDB/releases/download/2.26.0-rc1/tiledb-linux-x86_64-2.26.0-rc1-f5934ea.tar.gz
       - name: Unpack release tarball
         if: github.ref_name != 'main'
         run: |
