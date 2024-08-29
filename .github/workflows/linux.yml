@@ -304,6 +304,7 @@ jobs:
       - name: Create a wheel
         run: |
           export LIBTILEDBVCF_PATH=$(pwd)/install-libtiledbvcf/lib/
+          export TileDB_DIR=$(pwd)/install-libtiledb/lib/cmake/TileDB
           python -m pip wheel -v --wheel-dir=apis/python/dist apis/python
       - name: Upload Python wheel as artifact
         uses: actions/upload-artifact@v4
