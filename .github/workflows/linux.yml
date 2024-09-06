@@ -58,7 +58,7 @@ jobs:
       # Use recent release tarball on branches for quicker feedback
       - name: Download release tarball
         if: github.ref_name != 'main'
-        run: wget https://github.com/TileDB-Inc/TileDB/releases/download/2.26.0-rc1/tiledb-linux-x86_64-2.26.0-rc1-f5934ea.tar.gz
+        run: wget https://github.com/TileDB-Inc/TileDB/releases/download/2.26.0-rc3/tiledb-linux-x86_64-2.26.0-rc3-ffb4b8e.tar.gz
       - name: Unpack release tarball
         if: github.ref_name != 'main'
         run: |
