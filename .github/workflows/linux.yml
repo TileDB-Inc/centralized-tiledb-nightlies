@@ -114,7 +114,9 @@ jobs:
         uses: actions/checkout@v4
         with:
           repository: TileDB-Inc/TileDB-Py
-          ref: ${{ github.event.inputs.TILEDB_PY_REF || 'dev' }}
+          # revert to 'dev' after 2.26.0 release
+          ref: ${{ github.event.inputs.TILEDB_PY_REF || 'agis/sc-32959/schema-dump-does-not-print-out-consistently-in-notebook' }}
+          # ref: ${{ github.event.inputs.TILEDB_PY_REF || 'dev' }}
           fetch-depth: 0 # fetch everything for python setuptools_scm
       - name: Download nightly-libtiledb
         uses: actions/download-artifact@v4
