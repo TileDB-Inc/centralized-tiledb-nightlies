@@ -23,7 +23,7 @@ on:
       TILEDB_R_REF:
         description: >-
           The Git reference (tag, branch, commit) to checkout TileDB-Inc/TileDB-R
-        default: master
+        default: main
       TILEDB_VCF_REF:
         description: >-
           The Git reference (tag, branch, commit) to checkout
@@ -158,7 +158,7 @@ jobs:
         uses: actions/checkout@v4
         with:
           repository: TileDB-Inc/TileDB-R
-          ref: ${{ github.event.inputs.TILEDB_R_REF || 'master' }}
+          ref: ${{ github.event.inputs.TILEDB_R_REF || 'main' }}
       - name: Download nightly-libtiledb
         uses: actions/download-artifact@v4
         with:
