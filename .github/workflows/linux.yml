@@ -849,7 +849,7 @@ jobs:
       issues: write
     runs-on: ubuntu-latest
     needs: [build-all]
-    if: ( failure() || cancelled() ) && github.repository_owner == 'jdblischak' && github.event_name == 'schedule'
+    if: ( failure() || cancelled() ) && github.repository_owner == 'TileDB-Inc' && github.event_name == 'schedule'
     steps:
       - uses: actions/checkout@v4
       - name: Open Issue
