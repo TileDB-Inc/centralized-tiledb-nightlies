@@ -16,11 +16,11 @@ mkdir -p "/tmp/nightly-tiledb-$the_date/install-libtiledbvcf"
 mkdir -p "/tmp/nightly-tiledb-$the_date/install-libtiledbsoma"
 
 wget --quiet -O "/tmp/nightly-tiledb-$the_date/downloads/libtiledb-$the_date.tar.gz" \
-  https://github.com/jdblischak/centralized-tiledb-nightlies/releases/download/$the_date/libtiledb-$the_date.tar.gz
+  https://github.com/TileDB-Inc/centralized-tiledb-nightlies/releases/download/$the_date/libtiledb-$the_date.tar.gz
 wget --quiet -O "/tmp/nightly-tiledb-$the_date/downloads/libtiledbvcf-$the_date.tar.gz" \
-  https://github.com/jdblischak/centralized-tiledb-nightlies/releases/download/$the_date/libtiledbvcf-$the_date.tar.gz
+  https://github.com/TileDB-Inc/centralized-tiledb-nightlies/releases/download/$the_date/libtiledbvcf-$the_date.tar.gz
 wget --quiet -O "/tmp/nightly-tiledb-$the_date/downloads/libtiledbsoma-$the_date.tar.gz" \
-  https://github.com/jdblischak/centralized-tiledb-nightlies/releases/download/$the_date/libtiledbsoma-$the_date.tar.gz
+  https://github.com/TileDB-Inc/centralized-tiledb-nightlies/releases/download/$the_date/libtiledbsoma-$the_date.tar.gz
 
 tar -C "/tmp/nightly-tiledb-$the_date/install-libtiledb" \
   -xzf "/tmp/nightly-tiledb-$the_date/downloads/libtiledb-$the_date.tar.gz"
