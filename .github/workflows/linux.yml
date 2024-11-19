@@ -48,7 +48,7 @@ on:
         default: main
 jobs:
   libtiledb:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     steps:
       - name: Clone TileDB
         uses: actions/checkout@v4
@@ -104,7 +104,7 @@ jobs:
       #     make -C build-libtiledb/tiledb tests -j $(nproc)
       #     ./build-libtiledb/tiledb/test/tiledb_unit --vfs native
   tiledb-py:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     needs: libtiledb
     env:
       LD_LIBRARY_PATH: ${{ github.workspace }}/install-libtiledb/lib
@@ -149,7 +149,7 @@ jobs:
           retention-days: 14
           if-no-files-found: error
   tiledb-r:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     needs: libtiledb
     env:
       _R_CHECK_FORCE_SUGGESTS_: "FALSE"
@@ -239,7 +239,7 @@ jobs:
           # USAGE: run-cli-tests.sh <build-dir> <inputs-dir>
           libtiledbvcf/test/run-cli-tests.sh build-libtiledbvcf libtiledbvcf/test/inputs
   tiledbvcf-py:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     needs: [libtiledb, libtiledbvcf, tiledb-py]
     env:
       LD_LIBRARY_PATH: "${{ github.workspace }}/install-libtiledb/lib:${{ github.workspace }}/install-libtiledbvcf/lib"
@@ -314,7 +314,7 @@ jobs:
           retention-days: 14
           if-no-files-found: error
   libtiledbsoma:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     needs: [libtiledb]
     env:
       TileDB_DIR: ${{ github.workspace }}/install-libtiledb
@@ -362,7 +362,7 @@ jobs:
           cmake --build build-libtiledbsoma/libtiledbsoma --target build_tests -j $(nproc)
           ctest --test-dir build-libtiledbsoma/libtiledbsoma -C Release --verbose --rerun-failed --output-on-failure
   tiledbsoma-py:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     needs: [libtiledb, libtiledbsoma, tiledb-py]
     env:
       LD_LIBRARY_PATH: "${{ github.workspace }}/install-libtiledb/lib:${{ github.workspace }}/install-libtiledbsoma/lib"
@@ -447,7 +447,7 @@ jobs:
           retention-days: 14
           if-no-files-found: error
   tiledbsoma-r:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     needs: [libtiledb, libtiledbsoma, tiledb-r]
     env:
       LD_LIBRARY_PATH: "${{ github.workspace }}/install-libtiledb/lib:${{ github.workspace }}/install-libtiledbsoma/lib"
@@ -503,7 +503,7 @@ jobs:
         run:
           Rscript -e 'testthat::test_package("tiledbsoma")'
   tiledb-mariadb:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     needs: [libtiledb]
     env:
       CFLAGS: -Wno-error=deprecated-declarations -Wno-error=missing-braces
@@ -561,7 +561,7 @@ jobs:
           cd builddir
           ./mysql-test/mysql-test-run.pl --suite=mytile
   tiledb-go:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     needs: [libtiledb]
     steps:
       - name: Clone TileDB-Go
@@ -583,7 +583,7 @@ jobs:
           export LD_LIBRARY_PATH=$(pwd)/install-libtiledb/lib
           go test -v ./...
   tiledb-cloud-py:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     needs: [libtiledb, tiledb-py]
     env:
       LD_LIBRARY_PATH: "${{ github.workspace }}/install-libtiledb/lib"
@@ -644,7 +644,7 @@ jobs:
     # this is simply a target to build everything locally with `act` without
     # creating a new release
     name: Build everything
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     needs: [libtiledb, tiledb-py, tiledb-r, libtiledbvcf, tiledbvcf-py, libtiledbsoma,
             tiledbsoma-py, tiledbsoma-r, tiledb-mariadb, tiledb-go, tiledb-cloud-py]
     steps:
@@ -652,7 +652,7 @@ jobs:
   create-release:
     name: Create a new release
     if: github.ref_name == 'main' && github.repository_owner == 'TileDB-Inc' && github.event_name != 'pull_request'
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     permissions:
       contents: write
     env:
@@ -671,7 +671,7 @@ jobs:
             echo "Release already exists: $the_date"
           fi
   upload-libtiledb:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     needs: [create-release, libtiledb]
     permissions:
       contents: write
@@ -691,7 +691,7 @@ jobs:
           tar -C install-libtiledb -cvzf libtiledb-${the_date}.tar.gz ./
           gh release upload ${the_date} libtiledb-${the_date}.tar.gz --clobber
   upload-tiledb-py:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     needs: [create-release, tiledb-py]
     permissions:
       contents: write
@@ -710,7 +710,7 @@ jobs:
           unzip -l tiledb-*-linux_x86_64.whl
           gh release upload ${the_date} tiledb-*-linux_x86_64.whl --clobber
   upload-tiledb-r:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     needs: [create-release, tiledb-r]
     permissions:
       contents: write
@@ -729,7 +729,7 @@ jobs:
           tar --list -f tiledb_*_R_x86_64-pc-linux-gnu.tar.gz
           gh release upload ${the_date} tiledb_*_R_x86_64-pc-linux-gnu.tar.gz --clobber
   upload-libtiledbvcf:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     needs: [create-release, libtiledbvcf]
     permissions:
       contents: write
@@ -749,7 +749,7 @@ jobs:
           tar -C install-libtiledbvcf -cvzf libtiledbvcf-${the_date}.tar.gz ./
           gh release upload ${the_date} libtiledbvcf-${the_date}.tar.gz --clobber
   upload-tiledbvcf-py:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     needs: [create-release, tiledbvcf-py]
     permissions:
       contents: write
@@ -768,7 +768,7 @@ jobs:
           unzip -l tiledbvcf-*-linux_x86_64.whl
           gh release upload ${the_date} tiledbvcf-*-linux_x86_64.whl --clobber
   upload-libtiledbsoma:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     needs: [create-release, libtiledbsoma]
     permissions:
       contents: write
@@ -788,7 +788,7 @@ jobs:
           tar -C install-libtiledbsoma -cvzf libtiledbsoma-${the_date}.tar.gz ./
           gh release upload ${the_date} libtiledbsoma-${the_date}.tar.gz --clobber
   upload-tiledbsoma-py:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     needs: [create-release, tiledbsoma-py]
     permissions:
       contents: write
@@ -807,7 +807,7 @@ jobs:
           unzip -l tiledbsoma-*-linux_x86_64.whl
           gh release upload ${the_date} tiledbsoma-*-linux_x86_64.whl --clobber
   upload-tiledbsoma-r:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     needs: [create-release, tiledbsoma-r]
     permissions:
       contents: write
@@ -826,7 +826,7 @@ jobs:
           tar --list -f tiledbsoma_*_R_x86_64-pc-linux-gnu.tar.gz
           gh release upload ${the_date} tiledbsoma_*_R_x86_64-pc-linux-gnu.tar.gz --clobber
   upload-tiledb-cloud-py:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     needs: [create-release, tiledb-cloud-py]
     permissions:
       contents: write
@@ -847,7 +847,7 @@ jobs:
   issue:
     permissions:
       issues: write
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     needs: [build-all]
     if: ( failure() || cancelled() ) && github.repository_owner == 'TileDB-Inc' && github.event_name == 'schedule'
     steps:
