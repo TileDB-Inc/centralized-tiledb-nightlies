@@ -183,7 +183,7 @@ jobs:
       - name: Test
         run: R -e 'tinytest::test_package("tiledb")'
   libtiledbvcf:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     needs: libtiledb
     env:
       LD_LIBRARY_PATH: ${{ github.workspace }}/install-libtiledb/lib
@@ -202,6 +202,8 @@ jobs:
         run: |
           sudo apt-get update
           sudo apt-get install --yes cmake
+          # Install htslib dependencies
+          sudo apt-get install -y automake autoconf libbz2-dev liblzma-dev
       - name: Configure libtiledbvcf
         run: |
           cmake -S libtiledbvcf -B build-libtiledbvcf \
