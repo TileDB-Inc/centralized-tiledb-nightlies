@@ -487,13 +487,12 @@ jobs:
           install.packages(binary_tarball, repos = NULL)
       - name: Dependencies
         run: cd apis/r && tools/r-ci.sh install_all
+      - name: Remove deprecation warnings
+        run: mkdir ~/.R && echo "CXX20FLAGS=-Wno-deprecated-declarations -Wno-deprecated" > ~/.R/Makevars
       - name: Build
-        run: |
-          export CXX17FLAGS="-Wno-deprecated-declarations -Wno-deprecated"
-          cd apis/r && R CMD build --no-manual --no-build-vignettes .
+        run: cd apis/r && R CMD build --no-manual --no-build-vignettes .
       - name: Install
-        run:
-          cd apis/r && R CMD INSTALL --install-tests --build tiledbsoma_*.tar.gz
+        run: cd apis/r && R CMD INSTALL --install-tests --build tiledbsoma_*.tar.gz
       - name: Upload R binary tarball as artifact
         uses: actions/upload-artifact@v4
         with:
