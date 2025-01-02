@@ -15,7 +15,7 @@ on:
       LIBTILEDB_REF:
         description: >-
           The Git reference (tag, branch, commit) to checkout TileDB-Inc/TileDB
-        default: dev
+        default: main
       TILEDB_PY_REF:
         description: >-
           The Git reference (tag, branch, commit) to checkout TileDB-Inc/TileDB-Py
@@ -54,7 +54,7 @@ jobs:
         uses: actions/checkout@v4
         with:
           repository: TileDB-Inc/TileDB
-          ref: ${{ github.event.inputs.LIBTILEDB_REF || 'dev' }}
+          ref: ${{ github.event.inputs.LIBTILEDB_REF || 'main' }}
       # Use recent release tarball on branches for quicker feedback
       - name: Download release tarball
         if: github.ref_name != 'main'
