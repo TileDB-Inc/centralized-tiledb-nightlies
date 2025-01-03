@@ -19,7 +19,7 @@ on:
       TILEDB_PY_REF:
         description: >-
           The Git reference (tag, branch, commit) to checkout TileDB-Inc/TileDB-Py
-        default: dev
+        default: main
       TILEDB_R_REF:
         description: >-
           The Git reference (tag, branch, commit) to checkout TileDB-Inc/TileDB-R
