@@ -435,6 +435,7 @@ jobs:
           python -c "import tiledbsoma; print(tiledbsoma.pytiledbsoma.version())"
           python -c "import tiledbsoma; print(f'tiledbsoma-py={tiledbsoma.__version__}')"
           # Obtain test data
+          make data
           cd test
           tar zxf soco.tgz
           cd ..
