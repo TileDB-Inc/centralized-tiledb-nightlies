@@ -436,9 +436,6 @@ jobs:
           python -c "import tiledbsoma; print(f'tiledbsoma-py={tiledbsoma.__version__}')"
           # Obtain test data
           make data
-          cd test
-          tar zxf soco.tgz
-          cd ..
           # Run test suite
           PYTHONPATH=$(pwd)/apis/python/src python -m pytest apis/python/tests
       - name: Create a wheel
