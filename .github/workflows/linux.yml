@@ -545,6 +545,7 @@ jobs:
             -D PLUGIN_CONNECT=NO \
             -D CMAKE_BUILD_TYPE=Release \
             -D CMAKE_INCLUDE_PATH="/usr/local/include" \
+            -D CMAKE_POLICY_VERSION_MINIMUM=3.5 \
             -D TILEDB_FORCE_ALL_DEPS=${TILEDB_FORCE_ALL_DEPS-OFF}
       - name: Build TileDB-MariaDB
         run: |
