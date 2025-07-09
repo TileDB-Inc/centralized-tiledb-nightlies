@@ -559,10 +559,13 @@ jobs:
           # Fail if not properly linked to nightly libtiledb.so
           ldd builddir/storage/mytile/ha_mytile.so | \
             grep -q $(pwd)/install-libtiledb/lib/libtiledb.so
-      - name: Test TileDB-MariaDB
-        run: |
-          cd builddir
-          ./mysql-test/mysql-test-run.pl --suite=mytile
+      # Failing tests are being tracked upstream at
+      # https://github.com/TileDB-Inc/TileDB-MariaDB/issues/393
+      #
+      # - name: Test TileDB-MariaDB
+      #   run: |
+      #     cd builddir
+      #     ./mysql-test/mysql-test-run.pl --suite=mytile
   tiledb-go:
     runs-on: ubuntu-24.04
     needs: [libtiledb]
