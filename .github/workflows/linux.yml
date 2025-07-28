@@ -137,7 +137,7 @@ jobs:
           python -c "import tiledb; print(tiledb.libtiledb.version())"
           python -c "import tiledb; print(tiledb.version())"
       - name: Test TileDB-Py
-        run: pytest -vv --ignore-glob='*_examples.py'
+        run: pytest -vv
       - name: Create a wheel
         run: |
           export TILEDB_PATH=$(pwd)/install-libtiledb/
