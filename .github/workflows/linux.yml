@@ -9,7 +9,9 @@ on:
       - '.github/workflows/linux.yml'
       - 'scripts/**'
   schedule:
-    - cron: "0 2 * * *" # Every night at 2 AM UTC (9 PM EST; 10 PM EDT)
+    # Every Sunday night at 2 AM UTC (9 PM EST; 10 PM EDT)
+    # https://crontab.guru/#0_2_*_*_0
+    - cron: "0 2 * * 0"
   workflow_dispatch:
     inputs:
       LIBTILEDB_REF:
