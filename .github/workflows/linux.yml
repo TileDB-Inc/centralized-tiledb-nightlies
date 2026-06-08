@@ -120,7 +120,7 @@ jobs:
           ref: ${{ github.event.inputs.TILEDB_PY_REF || 'main' }}
           fetch-depth: 0 # fetch everything for python setuptools_scm
       - name: Download nightly-libtiledb
-        uses: actions/download-artifact@v7
+        uses: actions/download-artifact@v8
         with:
           name: nightly-libtiledb-linux
           path: install-libtiledb
@@ -163,7 +163,7 @@ jobs:
           repository: TileDB-Inc/TileDB-R
           ref: ${{ github.event.inputs.TILEDB_R_REF || 'main' }}
       - name: Download nightly-libtiledb
-        uses: actions/download-artifact@v7
+        uses: actions/download-artifact@v8
         with:
           name: nightly-libtiledb-linux
           path: install-libtiledb
@@ -197,7 +197,7 @@ jobs:
           repository: TileDB-Inc/TileDB-VCF
           ref: ${{ github.event.inputs.TILEDB_VCF_REF || 'main' }}
       - name: Download nightly-libtiledb
-        uses: actions/download-artifact@v7
+        uses: actions/download-artifact@v8
         with:
           name: nightly-libtiledb-linux
           path: install-libtiledb
@@ -257,17 +257,17 @@ jobs:
           ref: ${{ github.event.inputs.TILEDB_VCF_REF || 'main' }}
           fetch-depth: 0 # fetch everything for python setuptools_scm
       - name: Download nightly-libtiledb
-        uses: actions/download-artifact@v7
+        uses: actions/download-artifact@v8
         with:
           name: nightly-libtiledb-linux
           path: install-libtiledb
       - name: Download nightly-libtiledbvcf
-        uses: actions/download-artifact@v7
+        uses: actions/download-artifact@v8
         with:
           name: nightly-libtiledbvcf-linux
           path: install-libtiledbvcf
       - name: Download nightly-tiledb-py
-        uses: actions/download-artifact@v7
+        uses: actions/download-artifact@v8
         with:
           name: nightly-tiledb-py-linux
       - name: Set up Python
@@ -332,7 +332,7 @@ jobs:
           repository: single-cell-data/TileDB-SOMA
           ref: ${{ github.event.inputs.TILEDB_SOMA_REF || 'main' }}
       - name: Download nightly-libtiledb
-        uses: actions/download-artifact@v7
+        uses: actions/download-artifact@v8
         with:
           name: nightly-libtiledb-linux
           path: install-libtiledb
@@ -385,17 +385,17 @@ jobs:
           ref: ${{ github.event.inputs.TILEDB_SOMA_REF || 'main' }}
           fetch-depth: 0 # fetch everything for python setuptools_scm
       - name: Download nightly-libtiledb
-        uses: actions/download-artifact@v7
+        uses: actions/download-artifact@v8
         with:
           name: nightly-libtiledb-linux
           path: install-libtiledb
       - name: Download nightly-libtiledbsoma
-        uses: actions/download-artifact@v7
+        uses: actions/download-artifact@v8
         with:
           name: nightly-libtiledbsoma-linux
           path: install-libtiledbsoma
       - name: Download nightly-tiledb-py
-        uses: actions/download-artifact@v7
+        uses: actions/download-artifact@v8
         with:
           name: nightly-tiledb-py-linux
       - name: Set up Python
@@ -465,17 +465,17 @@ jobs:
           repository: single-cell-data/TileDB-SOMA
           ref: ${{ github.event.inputs.TILEDB_SOMA_REF || 'main' }}
       - name: Download nightly-libtiledb
-        uses: actions/download-artifact@v7
+        uses: actions/download-artifact@v8
         with:
           name: nightly-libtiledb-linux
           path: install-libtiledb
       - name: Download nightly-libtiledbsoma
-        uses: actions/download-artifact@v7
+        uses: actions/download-artifact@v8
         with:
           name: nightly-libtiledbsoma-linux
           path: install-libtiledbsoma
       - name: Download nightly-tiledb-r
-        uses: actions/download-artifact@v7
+        uses: actions/download-artifact@v8
         with:
           name: nightly-tiledb-r-linux
       - name: Bootstrap
@@ -527,7 +527,7 @@ jobs:
           ref: ${{ github.event.inputs.TILEDB_MARIADB_REF || 'master' }}
           path: storage/mytile
       - name: Download nightly-libtiledb
-        uses: actions/download-artifact@v7
+        uses: actions/download-artifact@v8
         with:
           name: nightly-libtiledb-linux
           path: install-libtiledb
@@ -579,7 +579,7 @@ jobs:
           repository: TileDB-Inc/TileDB-Go
           ref: ${{ github.event.inputs.TILEDB_GO_REF || 'master' }}
       - name: Download nightly-libtiledb
-        uses: actions/download-artifact@v7
+        uses: actions/download-artifact@v8
         with:
           name: nightly-libtiledb-linux
           path: install-libtiledb
@@ -605,12 +605,12 @@ jobs:
           ref: ${{ github.event.inputs.TILEDB_CLOUD_PY_REF || 'main' }}
           fetch-depth: 0 # fetch everything for python setuptools_scm
       - name: Download nightly-libtiledb
-        uses: actions/download-artifact@v7
+        uses: actions/download-artifact@v8
         with:
           name: nightly-libtiledb-linux
           path: install-libtiledb
       - name: Download nightly-tiledb-py
-        uses: actions/download-artifact@v7
+        uses: actions/download-artifact@v8
         with:
           name: nightly-tiledb-py-linux
       - name: Set up Python
@@ -691,7 +691,7 @@ jobs:
     steps:
       - uses: actions/checkout@v6
       - name: Download nightly-libtiledb
-        uses: actions/download-artifact@v7
+        uses: actions/download-artifact@v8
         with:
           name: nightly-libtiledb-linux
           path: install-libtiledb
@@ -711,7 +711,7 @@ jobs:
     steps:
       - uses: actions/checkout@v6
       - name: Download nightly-tiledb-py
-        uses: actions/download-artifact@v7
+        uses: actions/download-artifact@v8
         with:
           name: nightly-tiledb-py-linux
       - name: Upload tiledb-py to release
@@ -730,7 +730,7 @@ jobs:
     steps:
       - uses: actions/checkout@v6
       - name: Download nightly-tiledb-r
-        uses: actions/download-artifact@v7
+        uses: actions/download-artifact@v8
         with:
           name: nightly-tiledb-r-linux
       - name: Upload tiledb-r to release
@@ -749,7 +749,7 @@ jobs:
     steps:
       - uses: actions/checkout@v6
       - name: Download nightly-libtiledbvcf
-        uses: actions/download-artifact@v7
+        uses: actions/download-artifact@v8
         with:
           name: nightly-libtiledbvcf-linux
           path: install-libtiledbvcf
@@ -769,7 +769,7 @@ jobs:
     steps:
       - uses: actions/checkout@v6
       - name: Download nightly-tiledbvcf-py
-        uses: actions/download-artifact@v7
+        uses: actions/download-artifact@v8
         with:
           name: nightly-tiledbvcf-py-linux
       - name: Upload tiledbvcf-py to release
@@ -788,7 +788,7 @@ jobs:
     steps:
       - uses: actions/checkout@v6
       - name: Download nightly-libtiledbsoma
-        uses: actions/download-artifact@v7
+        uses: actions/download-artifact@v8
         with:
           name: nightly-libtiledbsoma-linux
           path: install-libtiledbsoma
@@ -808,7 +808,7 @@ jobs:
     steps:
       - uses: actions/checkout@v6
       - name: Download nightly-tiledbsoma-py
-        uses: actions/download-artifact@v7
+        uses: actions/download-artifact@v8
         with:
           name: nightly-tiledbsoma-py-linux
       - name: Upload tiledbsoma-py to release
@@ -827,7 +827,7 @@ jobs:
     steps:
       - uses: actions/checkout@v6
       - name: Download nightly-tiledbsoma-r
-        uses: actions/download-artifact@v7
+        uses: actions/download-artifact@v8
         with:
           name: nightly-tiledbsoma-r-linux
       - name: Upload tiledbsoma-r to release
@@ -846,7 +846,7 @@ jobs:
     steps:
       - uses: actions/checkout@v6
       - name: Download nightly-tiledb-cloud-py
-        uses: actions/download-artifact@v7
+        uses: actions/download-artifact@v8
         with:
           name: nightly-tiledb-cloud-py-linux
       - name: Upload tiledb-cloud-py to release
