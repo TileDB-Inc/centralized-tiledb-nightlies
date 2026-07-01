@@ -53,7 +53,7 @@ jobs:
     runs-on: ubuntu-24.04
     steps:
       - name: Clone TileDB
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
         with:
           repository: TileDB-Inc/TileDB
           ref: ${{ github.event.inputs.LIBTILEDB_REF || 'main' }}
@@ -114,7 +114,7 @@ jobs:
       PIP_PREFER_BINARY: 1
     steps:
       - name: Clone TileDB-Py
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
         with:
           repository: TileDB-Inc/TileDB-Py
           ref: ${{ github.event.inputs.TILEDB_PY_REF || 'main' }}
@@ -158,7 +158,7 @@ jobs:
       _R_CHECK_FORCE_SUGGESTS_: "FALSE"
     steps:
       - name: Clone TileDB-R
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
         with:
           repository: TileDB-Inc/TileDB-R
           ref: ${{ github.event.inputs.TILEDB_R_REF || 'main' }}
@@ -192,7 +192,7 @@ jobs:
       LD_LIBRARY_PATH: ${{ github.workspace }}/install-libtiledb/lib
     steps:
       - name: Clone TileDB-VCF
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
         with:
           repository: TileDB-Inc/TileDB-VCF
           ref: ${{ github.event.inputs.TILEDB_VCF_REF || 'main' }}
@@ -251,7 +251,7 @@ jobs:
       PIP_PREFER_BINARY: 1
     steps:
       - name: Clone TileDB-VCF
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
         with:
           repository: TileDB-Inc/TileDB-VCF
           ref: ${{ github.event.inputs.TILEDB_VCF_REF || 'main' }}
@@ -327,7 +327,7 @@ jobs:
       LD_LIBRARY_PATH: ${{ github.workspace }}/install-libtiledb/lib
     steps:
       - name: Clone TileDB-SOMA
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
         with:
           repository: single-cell-data/TileDB-SOMA
           ref: ${{ github.event.inputs.TILEDB_SOMA_REF || 'main' }}
@@ -379,7 +379,7 @@ jobs:
       PIP_PREFER_BINARY: 1
     steps:
       - name: Clone TileDB-SOMA
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
         with:
           repository: single-cell-data/TileDB-SOMA
           ref: ${{ github.event.inputs.TILEDB_SOMA_REF || 'main' }}
@@ -460,7 +460,7 @@ jobs:
       PKG_CONFIG_PATH: "${{ github.workspace }}/install-libtiledb/lib/pkgconfig:${{ github.workspace }}/install-libtiledbsoma/lib/pkgconfig"
     steps:
       - name: Clone TileDB-SOMA
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
         with:
           repository: single-cell-data/TileDB-SOMA
           ref: ${{ github.event.inputs.TILEDB_SOMA_REF || 'main' }}
@@ -516,12 +516,12 @@ jobs:
       LD_LIBRARY_PATH: ${{ github.workspace }}/install-libtiledb/lib
     steps:
       - name: Clone MariaDB
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
         with:
           repository: MariaDB/server.git
           ref: mariadb-11.0.2
       - name: Clone TileDB-MariaDB into MariaDB
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
         with:
           repository: TileDB-Inc/TileDB-MariaDB
           ref: ${{ github.event.inputs.TILEDB_MARIADB_REF || 'master' }}
@@ -574,7 +574,7 @@ jobs:
     needs: [libtiledb]
     steps:
       - name: Clone TileDB-Go
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
         with:
           repository: TileDB-Inc/TileDB-Go
           ref: ${{ github.event.inputs.TILEDB_GO_REF || 'master' }}
@@ -599,7 +599,7 @@ jobs:
       PIP_PREFER_BINARY: 1
     steps:
       - name: Clone TileDB-Cloud-Py
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
         with:
           repository: TileDB-Inc/TileDB-Cloud-Py
           ref: ${{ github.event.inputs.TILEDB_CLOUD_PY_REF || 'main' }}
@@ -669,7 +669,7 @@ jobs:
       GH_TOKEN: ${{ github.token }}
       TZ: "America/New_York"
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
       - name: Create release
         run: |
           the_date=$(date +%Y-%m-%d)
@@ -691,7 +691,7 @@ jobs:
       GH_TOKEN: ${{ github.token }}
       TZ: "America/New_York"
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
       - name: Download nightly-libtiledb
         uses: actions/download-artifact@v8
         with:
@@ -711,7 +711,7 @@ jobs:
       GH_TOKEN: ${{ github.token }}
       TZ: "America/New_York"
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
       - name: Download nightly-tiledb-py
         uses: actions/download-artifact@v8
         with:
@@ -730,7 +730,7 @@ jobs:
       GH_TOKEN: ${{ github.token }}
       TZ: "America/New_York"
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
       - name: Download nightly-tiledb-r
         uses: actions/download-artifact@v8
         with:
@@ -749,7 +749,7 @@ jobs:
       GH_TOKEN: ${{ github.token }}
       TZ: "America/New_York"
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
       - name: Download nightly-libtiledbvcf
         uses: actions/download-artifact@v8
         with:
@@ -769,7 +769,7 @@ jobs:
       GH_TOKEN: ${{ github.token }}
       TZ: "America/New_York"
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
       - name: Download nightly-tiledbvcf-py
         uses: actions/download-artifact@v8
         with:
@@ -788,7 +788,7 @@ jobs:
       GH_TOKEN: ${{ github.token }}
       TZ: "America/New_York"
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
       - name: Download nightly-libtiledbsoma
         uses: actions/download-artifact@v8
         with:
@@ -808,7 +808,7 @@ jobs:
       GH_TOKEN: ${{ github.token }}
       TZ: "America/New_York"
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
       - name: Download nightly-tiledbsoma-py
         uses: actions/download-artifact@v8
         with:
@@ -827,7 +827,7 @@ jobs:
       GH_TOKEN: ${{ github.token }}
       TZ: "America/New_York"
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
       - name: Download nightly-tiledbsoma-r
         uses: actions/download-artifact@v8
         with:
@@ -846,7 +846,7 @@ jobs:
       GH_TOKEN: ${{ github.token }}
       TZ: "America/New_York"
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
       - name: Download nightly-tiledb-cloud-py
         uses: actions/download-artifact@v8
         with:
@@ -863,7 +863,7 @@ jobs:
     needs: [build-all]
     if: ( failure() || cancelled() ) && github.repository_owner == 'TileDB-Inc' && github.event_name == 'schedule'
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
       - name: Open Issue
         uses: TileDB-Inc/github-actions/open-issue@main
         with:
