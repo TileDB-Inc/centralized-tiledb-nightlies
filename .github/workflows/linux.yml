@@ -125,7 +125,7 @@ jobs:
           name: nightly-libtiledb-linux
           path: install-libtiledb
       - name: Set up Python
-        uses: actions/setup-python@v6
+        uses: actions/setup-python@v7
         with:
           python-version: "3.11"
       - name: Build TileDB-Py
@@ -271,7 +271,7 @@ jobs:
         with:
           name: nightly-tiledb-py-linux
       - name: Set up Python
-        uses: actions/setup-python@v6
+        uses: actions/setup-python@v7
         with:
           python-version: "3.11"
       - name: Install dependencies
@@ -399,7 +399,7 @@ jobs:
         with:
           name: nightly-tiledb-py-linux
       - name: Set up Python
-        uses: actions/setup-python@v6
+        uses: actions/setup-python@v7
         with:
           python-version: "3.11"
       # https://github.com/single-cell-data/TileDB-SOMA/blob/main/apis/python/pyproject.toml
@@ -614,7 +614,7 @@ jobs:
         with:
           name: nightly-tiledb-py-linux
       - name: Set up Python
-        uses: actions/setup-python@v6
+        uses: actions/setup-python@v7
         with:
           python-version: "3.11"
       - name: Install dependencies
